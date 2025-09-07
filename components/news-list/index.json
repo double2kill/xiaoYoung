@@ -1,0 +1,6 @@
+{
+    "component": true,
+    "usingComponents": {
+        "news-card": "/components/news-card/index"
+    }
+}
