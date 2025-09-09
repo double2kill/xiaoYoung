@@ -1,0 +1,18 @@
+<view class="announcement-detail-page">
+  <view class="detail-header">
+    <view class="detail-title">{{announcement.title}}</view>
+    <view class="detail-meta">
+      <view class="detail-time">{{announcement.time}}</view>
+      <view class="detail-views">
+        <text class="views-icon">👁</text>
+        <text class="views-count">{{announcement.views}}</text>
+      </view>
+    </view>
+  </view>
+  
+  <view class="detail-content">
+    <view class="content-text">{{announcement.content}}</view>
+  </view>
+  
+  <t-toast id="t-toast" />
+</view>

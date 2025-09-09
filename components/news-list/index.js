@@ -2,7 +2,7 @@ Component({
   externalClasses: ['wr-class'],
 
   properties: {
-    goodsList: {
+    newsList: {
       type: Array,
       value: [],
     },
@@ -30,17 +30,12 @@ Component({
   },
 
   methods: {
-    onClickGoods(e) {
+    onClickNews(e) {
       const { index } = e.currentTarget.dataset;
       this.triggerEvent('click', { ...e.detail, index });
     },
 
-    onAddCart(e) {
-      const { index } = e.currentTarget.dataset;
-      this.triggerEvent('addcart', { ...e.detail, index });
-    },
-
-    onClickGoodsThumb(e) {
+    onClickNewsThumb(e) {
       const { index } = e.currentTarget.dataset;
       this.triggerEvent('thumb', { ...e.detail, index });
     },
@@ -54,7 +49,7 @@ Component({
         this.setData({ independentID: id });
       } else {
         this.setData({
-          independentID: `goods-list-${~~(Math.random() * 10 ** 8)}`,
+          independentID: `news-list-${~~(Math.random() * 10 ** 8)}`,
         });
       }
     },

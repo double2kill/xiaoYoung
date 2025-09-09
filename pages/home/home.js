@@ -1,12 +1,14 @@
 import { fetchHome } from '../../services/home/home';
 import { fetchGoodsList } from '../../services/good/fetchGoods';
 import Toast from 'tdesign-miniprogram/toast/index';
+import announcementModel from '../../model/announcement';
 
 Page({
   data: {
     imgSrcs: [],
     tabList: [],
     goodsList: [],
+    announcementList: [],
     goodsListLoadStatus: 0,
     pageLoading: false,
     current: 1,
@@ -46,6 +48,7 @@ Page({
 
   init() {
     this.loadHomePage();
+    this.loadMockAnnouncementData();
   },
 
   loadHomePage() {
@@ -126,6 +129,38 @@ Page({
     const { index: promotionID = 0 } = detail || {};
     wx.navigateTo({
       url: `/pages/promotion/promotion-detail/index?promotion_id=${promotionID}`,
+    });
+  },
+
+  loadMockAnnouncementData() {
+    const topAnnouncements = announcementModel.getTopAnnouncements(3);
+    
+    this.setData({
+      announcementList: topAnnouncements
+    });
+  },
+
+  announcementListClickHandle(e) {
+    const { index } = e.detail;
+    const { id } = this.data.announcementList[index];
+    wx.navigateTo({
+      url: `/pages/announcement/detail/index?announcementId=${id}`,
+    });
+  },
+
+  announcementListThumbHandle(e) {
+    const { index } = e.detail;
+    const announcement = this.data.announcementList[index];
+    Toast({
+      context: this,
+      selector: '#t-toast',
+      message: `预览公告：${announcement.title}`,
+    });
+  },
+
+  goToMoreAnnouncements() {
+    wx.navigateTo({
+      url: '/pages/announcement/list/index',
     });
   },
 });

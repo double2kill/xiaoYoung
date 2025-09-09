@@ -1,0 +1,32 @@
+<view class="announcement-list-page">
+  <view class="category-tabs-container">
+    <t-tabs
+      t-class="category-tabs"
+      t-class-active="category-tabs__active"
+      t-class-item="category-tabs__item"
+      defaultValue="{{currentTabIndex}}"
+      space-evenly="{{false}}"
+      bindchange="categoryChangeHandle"
+    >
+      <t-tab-panel
+        wx:for="{{categoryList}}"
+        wx:for-index="index"
+        wx:key="index"
+        label="{{item.text}}"
+        value="{{index}}"
+      />
+    </t-tabs>
+  </view>
+  
+  <news-list
+    newsList="{{announcementList}}"
+    bind:click="announcementListClickHandle"
+    bind:thumb="announcementListThumbHandle"
+  />
+  <load-more 
+    list-is-empty="{{!announcementList.length}}" 
+    status="{{loadStatus}}" 
+    bind:retry="onRetry" 
+  />
+  <t-toast id="t-toast" />
+</view>

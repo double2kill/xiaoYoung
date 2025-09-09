@@ -1,15 +1,13 @@
-<view class="goods-list-wrap wr-class" id="{{independentID}}">
-	<block wx:for="{{goodsList}}" wx:for-item="item" wx:key="index">
+<view class="news-list-wrap wr-class" id="{{independentID}}">
+	<block wx:for="{{newsList}}" wx:for-item="item" wx:key="index">
 		<news-card
-		  id="{{independentID}}-gd-{{index}}"
+		  id="{{independentID}}-news-{{index}}"
 		  data="{{item}}"
-		  currency="{{item.currency || '¥'}}"
 		  thresholds="{{thresholds}}"
-		  class="goods-card-inside"
+		  class="news-card-inside"
 		  data-index="{{index}}"
-		  bind:thumb="onClickGoodsThumb"
-		  bind:click="onClickGoods"
-		  bind:add-cart="onAddCart"
+		  bind:thumb="onClickNewsThumb"
+		  bind:click="onClickNews"
 		/>
 	</block>
 </view>

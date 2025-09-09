@@ -1,0 +1,13 @@
+{
+  "navigationBarTitleText": "最新动态",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 10,
+  "usingComponents": {
+    "t-image": "/components/webp-image/index",
+    "t-toast": "tdesign-miniprogram/toast/toast",
+    "t-tabs": "tdesign-miniprogram/tabs/tabs",
+    "t-tab-panel": "tdesign-miniprogram/tab-panel/tab-panel",
+    "news-list": "/components/news-list/index",
+    "load-more": "/components/load-more/index"
+  }
+}

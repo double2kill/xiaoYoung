@@ -20,16 +20,8 @@ Component({
         if (!data) {
           return;
         }
-        let isValidityLinePrice = true;
-        if (data.originPrice && data.price && data.originPrice < data.price) {
-          isValidityLinePrice = false;
-        }
-        this.setData({ goods: data, isValidityLinePrice });
+        this.setData({ news: data });
       },
-    },
-    currency: {
-      type: String,
-      value: '¥',
     },
 
     thresholds: {
@@ -47,8 +39,7 @@ Component({
 
   data: {
     independentID: '',
-    goods: { id: '' },
-    isValidityLinePrice: false,
+    news: { id: '' },
   },
 
   lifetimes: {
@@ -64,22 +55,11 @@ Component({
 
   methods: {
     clickHandle() {
-      this.triggerEvent('click', { goods: this.data.goods });
+      this.triggerEvent('click', { news: this.data.news });
     },
 
     clickThumbHandle() {
-      this.triggerEvent('thumb', { goods: this.data.goods });
-    },
-
-    addCartHandle(e) {
-      const { id } = e.currentTarget;
-      const { id: cardID } = e.currentTarget.dataset;
-      this.triggerEvent('add-cart', {
-        ...e.detail,
-        id,
-        cardID,
-        goods: this.data.goods,
-      });
+      this.triggerEvent('thumb', { news: this.data.news });
     },
 
     genIndependentID(id) {
@@ -87,7 +67,7 @@ Component({
       if (id) {
         independentID = id;
       } else {
-        independentID = `goods-card-${~~(Math.random() * 10 ** 8)}`;
+        independentID = `news-card-${~~(Math.random() * 10 ** 8)}`;
       }
       this.setData({ independentID });
     },
@@ -124,7 +104,7 @@ Component({
 
     intersectionObserverCB() {
       this.triggerEvent('ob', {
-        goods: this.data.goods,
+        news: this.data.news,
         context: this.intersectionObserverContext,
       });
     },
