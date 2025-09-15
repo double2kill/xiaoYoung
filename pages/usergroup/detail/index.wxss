@@ -1,0 +1,171 @@
+page {
+  height: auto;
+  min-height: 100vh;
+}
+
+.container {
+  padding: 40rpx;
+  padding-bottom: 200rpx;
+  background-color: #f5f5f5;
+  min-height: calc(100vh - 80rpx);
+}
+
+.group-detail {
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.group-header {
+  margin-bottom: 40rpx;
+}
+
+.group-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  line-height: 1.4;
+}
+
+.group-desc {
+  font-size: 26rpx;
+  color: #666;
+  margin-top: 10rpx;
+  line-height: 1.4;
+}
+
+.group-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40rpx;
+  padding: 30rpx 0;
+  border-top: 1rpx solid #eee;
+  border-bottom: 1rpx solid #eee;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.stat-value {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.rating {
+  display: flex;
+  gap: 8rpx;
+}
+
+.star {
+  font-size: 32rpx;
+  color: #ddd;
+}
+
+.star.active {
+  color: #ffd700;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.contact-icon {
+  font-size: 32rpx;
+  width: 40rpx;
+  text-align: center;
+}
+
+.contact-label {
+  font-size: 28rpx;
+  color: #666;
+  min-width: 120rpx;
+}
+
+.contact-value {
+  font-size: 28rpx;
+  color: #333;
+  flex: 1;
+}
+
+.group-meta {
+  margin-bottom: 40rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+}
+
+.meta-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.meta-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.meta-value {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+}
+
+.join-btn {
+  flex: 1;
+  background-color: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.join-btn:active {
+  background-color: #0056cc;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400rpx;
+  font-size: 28rpx;
+  color: #999;
+}
+
+.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400rpx;
+  font-size: 28rpx;
+  color: #999;
+}

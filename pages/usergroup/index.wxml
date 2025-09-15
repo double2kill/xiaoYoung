@@ -1,0 +1,39 @@
+<view class="container">
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+  
+  <view wx:elif="{{groupList.length > 0}}" class="group-list">
+    <view wx:for="{{groupList}}" wx:key="id" class="group-item" bindtap="onGroupTap" data-id="{{item.id}}">
+      <view class="group-header">
+        <view class="group-name">{{item.name}}</view>
+        <view class="group-desc">{{item.description}}</view>
+      </view>
+      
+      <view class="group-stats">
+        <view class="stat-item">
+          <text class="stat-label">成员</text>
+          <text class="stat-value">{{item.memberCount}}人</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-label">活跃度</text>
+          <view class="rating">
+            <text wx:for="{{item.rating}}" wx:for-item="star" wx:key="index" class="star {{star ? 'active' : ''}}">★</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="group-footer">
+        <view class="contact-info">
+          <text class="contact-icon">👤</text>
+          <text class="contact-name">{{item.contactName}}</text>
+        </view>
+        <view class="arrow">></view>
+      </view>
+    </view>
+  </view>
+  
+  <view wx:else class="empty">
+    <text>暂无圈子信息</text>
+  </view>
+</view>

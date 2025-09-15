@@ -47,11 +47,5 @@ Component({
       });
     },
 
-    // 跳转到商品列表
-    gotoGoodsList() {
-      wx.navigateTo({
-        url: `/pages/coupon/coupon-activity-goods/index?id=${this.data.couponDTO.key}`,
-      });
-    },
   },
 });

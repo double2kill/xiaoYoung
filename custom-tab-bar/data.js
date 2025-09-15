@@ -6,8 +6,8 @@ export default [
   },
   {
     icon: 'sort',
-    text: '分类',
-    url: 'pages/category/index',
+    text: '圈子',
+    url: 'pages/usergroup/index',
   },
   // {
   //   icon: 'cart',

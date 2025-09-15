@@ -38,8 +38,4 @@
       note="{{detail && detail.useNotes}}"
     />
   </t-cell-group>
-  <!-- 查看可用商品 -->
-  <view class="button-wrap">
-    <t-button shape="round" block bindtap="navGoodListHandle"> 查看可用商品 </t-button>
-  </view>
 </view>

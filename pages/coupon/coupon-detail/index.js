@@ -24,9 +24,4 @@ Page({
     });
   },
 
-  navGoodListHandle() {
-    wx.navigateTo({
-      url: `/pages/coupon/coupon-activity-goods/index?id=${this.id}`,
-    });
-  },
 });

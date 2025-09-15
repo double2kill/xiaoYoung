@@ -4,91 +4,56 @@ import Toast from 'tdesign-miniprogram/toast/index';
 const menuData = [
   [
     {
-      title: '收货地址',
+      title: '我的名片',
       tit: '',
       url: '',
-      type: 'address',
+      type: 'business-card',
+      icon: 'user',
     },
     {
-      title: '优惠券',
+      title: '我的消息',
       tit: '',
       url: '',
-      type: 'coupon',
-    },
-    {
-      title: '积分',
-      tit: '',
-      url: '',
-      type: 'point',
+      type: 'message',
+      icon: 'chat',
     },
   ],
   [
     {
-      title: '帮助中心',
+      title: '我的圈子',
       tit: '',
       url: '',
-      type: 'help-center',
+      type: 'circle',
+      icon: 'group',
     },
     {
-      title: '客服热线',
+      title: '我的活动',
       tit: '',
       url: '',
-      type: 'service',
-      icon: 'service',
+      type: 'activity',
+      icon: 'calendar',
+    },
+  ],
+  [
+    {
+      title: '账号设置',
+      tit: '',
+      url: '',
+      type: 'settings',
+      icon: 'setting',
     },
   ],
 ];
 
-const orderTagInfos = [
-  {
-    title: '待付款',
-    iconName: 'wallet',
-    orderNum: 0,
-    tabType: 5,
-    status: 1,
-  },
-  {
-    title: '待发货',
-    iconName: 'deliver',
-    orderNum: 0,
-    tabType: 10,
-    status: 1,
-  },
-  {
-    title: '待收货',
-    iconName: 'package',
-    orderNum: 0,
-    tabType: 40,
-    status: 1,
-  },
-  {
-    title: '待评价',
-    iconName: 'comment',
-    orderNum: 0,
-    tabType: 60,
-    status: 1,
-  },
-  {
-    title: '退款/售后',
-    iconName: 'exchang',
-    orderNum: 0,
-    tabType: 0,
-    status: 1,
-  },
-];
 
 const getDefaultData = () => ({
-  showMakePhone: false,
   userInfo: {
     avatarUrl: '',
     nickName: '正在登录...',
     phoneNumber: '',
   },
   menuData,
-  orderTagInfos,
-  customerServiceInfo: {},
   currAuthStep: 1,
-  showKefu: true,
   versionNo: '',
 });
 
@@ -112,25 +77,10 @@ Page({
   },
 
   fetUseriInfoHandle() {
-    fetchUserCenter().then(({ userInfo, countsData, orderTagInfos: orderInfo, customerServiceInfo }) => {
-      // eslint-disable-next-line no-unused-expressions
-      menuData?.[0].forEach((v) => {
-        countsData.forEach((counts) => {
-          if (counts.type === v.type) {
-            // eslint-disable-next-line no-param-reassign
-            v.tit = counts.num;
-          }
-        });
-      });
-      const info = orderTagInfos.map((v, index) => ({
-        ...v,
-        ...orderInfo[index],
-      }));
+    fetchUserCenter().then(({ userInfo }) => {
       this.setData({
         userInfo,
         menuData,
-        orderTagInfos: info,
-        customerServiceInfo,
         currAuthStep: 2,
       });
       wx.stopPullDownRefresh();
@@ -141,36 +91,42 @@ Page({
     const { type } = currentTarget.dataset;
 
     switch (type) {
-      case 'address': {
-        wx.navigateTo({ url: '/pages/user/address/list/index' });
-        break;
-      }
-      case 'service': {
-        this.openMakePhone();
-        break;
-      }
-      case 'help-center': {
+      case 'business-card': {
         Toast({
           context: this,
           selector: '#t-toast',
-          message: '你点击了帮助中心',
+          message: '我的名片功能开发中',
           icon: '',
           duration: 1000,
         });
         break;
       }
-      case 'point': {
+      case 'message': {
         Toast({
           context: this,
           selector: '#t-toast',
-          message: '你点击了积分菜单',
+          message: '我的消息功能开发中',
           icon: '',
           duration: 1000,
         });
         break;
       }
-      case 'coupon': {
-        wx.navigateTo({ url: '/pages/coupon/coupon-list/index' });
+      case 'circle': {
+        wx.navigateTo({ url: '/pages/usergroup/index' });
+        break;
+      }
+      case 'activity': {
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: '我的活动功能开发中',
+          icon: '',
+          duration: 1000,
+        });
+        break;
+      }
+      case 'settings': {
+        wx.navigateTo({ url: '/pages/user/person-info/index' });
         break;
       }
       default: {
@@ -186,33 +142,6 @@ Page({
     }
   },
 
-  jumpNav(e) {
-    const status = e.detail.tabType;
-
-    if (status === 0) {
-      wx.navigateTo({ url: '/pages/order/after-service-list/index' });
-    } else {
-      wx.navigateTo({ url: `/pages/order/order-list/index?status=${status}` });
-    }
-  },
-
-  jumpAllOrder() {
-    wx.navigateTo({ url: '/pages/order/order-list/index' });
-  },
-
-  openMakePhone() {
-    this.setData({ showMakePhone: true });
-  },
-
-  closeMakePhone() {
-    this.setData({ showMakePhone: false });
-  },
-
-  call() {
-    wx.makePhoneCall({
-      phoneNumber: this.data.customerServiceInfo.servicePhone,
-    });
-  },
 
   gotoUserEditPage() {
     const { currAuthStep } = this.data;

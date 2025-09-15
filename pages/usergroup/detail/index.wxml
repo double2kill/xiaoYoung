@@ -1,0 +1,57 @@
+<view class="container">
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+  
+  <view wx:elif="{{groupInfo}}" class="group-detail">
+    <view class="group-header">
+      <view class="group-name">{{groupInfo.name}}</view>
+      <view wx:if="{{groupInfo.description}}" class="group-desc">{{groupInfo.description}}</view>
+    </view>
+    
+    <view class="group-stats">
+      <view class="stat-item">
+        <text class="stat-label">成员</text>
+        <text class="stat-value">{{groupInfo.memberCount}}人</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">活跃度</text>
+        <view class="rating">
+          <text wx:for="{{groupInfo.rating}}" wx:key="index" class="star {{item ? 'active' : ''}}">★</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="contact-info">
+      <view class="contact-item">
+        <text class="contact-icon">👤</text>
+        <text class="contact-label">联系人:</text>
+        <text class="contact-value">{{groupInfo.contactName}}</text>
+      </view>
+      <view class="contact-item">
+        <text class="contact-icon">📞</text>
+        <text class="contact-label">联系方式:</text>
+        <text class="contact-value">{{groupInfo.contactPhone}}</text>
+      </view>
+    </view>
+    
+    <view class="group-meta">
+      <view class="meta-item">
+        <text class="meta-label">创建时间:</text>
+        <text class="meta-value">{{groupInfo.createTime}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">最后活跃:</text>
+        <text class="meta-value">{{groupInfo.lastActiveTime}}</text>
+      </view>
+    </view>
+    
+    <view class="action-buttons">
+      <button class="join-btn" bindtap="onJoinGroup">加入圈子</button>
+    </view>
+  </view>
+  
+  <view wx:else class="empty">
+    <text>圈子不存在</text>
+  </view>
+</view>

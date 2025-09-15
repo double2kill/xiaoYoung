@@ -41,6 +41,5 @@
     bind:click="announcementListClickHandle"
     bind:thumb="announcementListThumbHandle"
   />
-  <!-- <load-more list-is-empty="{{!goodsList.length}}" status="{{goodsListLoadStatus}}" bind:retry="onReTry" /> -->
   <t-toast id="t-toast" />
 </view>
