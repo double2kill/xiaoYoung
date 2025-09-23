@@ -1,10 +1,10 @@
 {
-  "pages": ["pages/home/home", "pages/usergroup/index", "pages/usergroup/detail/index", "pages/usercenter/index"],
+  "pages": ["pages/home/home", "pages/usergroup/index", "pages/usergroup/detail/index", "pages/usercenter/index", "pages/login/index"],
   "subpackages": [
     {
       "root": "pages/user",
       "name": "user",
-      "pages": ["person-info/index", "address/list/index", "address/edit/index", "name-edit/index"]
+      "pages": ["person-info/index", "address/list/index", "address/edit/index", "name-edit/index", "business-card/index", "business-card-preview/index", "business-card-search/index"]
     },
     {
       "root": "pages/coupon",

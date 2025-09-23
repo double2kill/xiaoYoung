@@ -3,7 +3,7 @@
   "projectname": "%E6%A0%A1%E5%8F%8B%E6%B1%87",
   "setting": {
     "compileHotReLoad": true,
-    "urlCheck": true,
+    "urlCheck": false,
     "coverView": true,
     "lazyloadPlaceholderEnable": false,
     "skylineRenderEnable": false,
@@ -13,7 +13,7 @@
     "useApiHostProcess": true,
     "showShadowRootInWxmlPanel": true,
     "useStaticServer": true,
-    "useLanDebug": false,
+    "useLanDebug": true,
     "showES6CompileOption": false,
     "bigPackageSizeSupport": false,
     "checkInvalidKey": true,

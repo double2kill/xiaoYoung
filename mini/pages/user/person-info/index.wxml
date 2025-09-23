@@ -41,7 +41,7 @@
   </t-cell-group>
 </view>
 <view class="person-info__wrapper">
-  <view class="person-info__btn" bind:tap="openUnbindConfirm"> 切换账号登录 </view>
+  <view class="person-info__btn" bind:tap="onLogout"> 退出登录 </view>
 </view>
 <t-select-picker
   show="{{typeVisible}}"

@@ -1,0 +1,81 @@
+<view class="business-card-display">
+  <view wx:if="{{loading}}" class="loading-state">
+    <t-loading theme="circular" size="40rpx" />
+    <text class="loading-text">加载中...</text>
+  </view>
+  
+  <view wx:elif="{{!displayCard || (!displayCard.industry && !displayCard.profession && !displayCard.position)}}" class="empty-state">
+    <text class="empty-text">暂无名片信息，点击编辑按钮创建名片</text>
+  </view>
+  
+  <view wx:else>
+    <view class="card-header">
+    <view class="avatar">
+      <image src="{{displayCard.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill" />
+    </view>
+    <view class="user-info">
+      <view class="name">{{displayCard.nickName || '用户'}}</view>
+      <view class="position" wx:if="{{displayCard.position}}">{{displayCard.position}}</view>
+      <view class="company" wx:if="{{displayCard.company}}">{{displayCard.company}}</view>
+    </view>
+  </view>
+
+  <view class="card-content">
+    <view class="info-row" wx:if="{{displayCard.industry}}">
+      <view class="label">行业</view>
+      <view class="value">{{displayCard.industry}}</view>
+    </view>
+    
+    <view class="info-row" wx:if="{{displayCard.profession}}">
+      <view class="label">专业</view>
+      <view class="value">{{displayCard.profession}}</view>
+    </view>
+    
+    <view class="info-row" wx:if="{{displayCard.interests}}">
+      <view class="label">兴趣爱好</view>
+      <view class="value">{{displayCard.interests}}</view>
+    </view>
+
+    <view class="info-row" wx:if="{{displayCard.email}}">
+      <view class="label">邮箱</view>
+      <view class="value">{{displayCard.email}}</view>
+    </view>
+
+    <view class="info-row" wx:if="{{displayCard.phone}}">
+      <view class="label">电话</view>
+      <view class="value">{{displayCard.phone}}</view>
+    </view>
+
+    <view class="info-row" wx:if="{{displayCard.wechat}}">
+      <view class="label">微信</view>
+      <view class="value">{{displayCard.wechat}}</view>
+    </view>
+  </view>
+
+  <view class="card-footer" wx:if="{{displayCard.introduction}}">
+    <view class="introduction">
+      <view class="intro-title">个人简介</view>
+      <view class="intro-content">{{displayCard.introduction}}</view>
+    </view>
+  </view>
+
+  <view class="card-actions" wx:if="{{showActions}}">
+    <t-button
+      theme="light"
+      size="small"
+      bind:tap="onEdit"
+      class="action-btn"
+    >
+      编辑
+    </t-button>
+    <t-button
+      theme="primary"
+      size="small"
+      bind:tap="onViewDetail"
+      class="action-btn"
+    >
+      查看详情
+    </t-button>
+  </view>
+  </view>
+</view>

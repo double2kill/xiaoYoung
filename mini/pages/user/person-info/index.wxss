@@ -10,12 +10,23 @@ page view {
 
 .person-info__btn {
   width: 100%;
-  border: 2rpx solid #ddd;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+  border: none;
   border-radius: 48rpx;
   padding: 18rpx 0;
   display: flex;
   align-self: center;
   justify-content: center;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 500;
+  box-shadow: 0 4rpx 12rpx rgba(255, 107, 107, 0.3);
+  transition: all 0.3s ease;
+}
+
+.person-info__btn:active {
+  transform: translateY(2rpx);
+  box-shadow: 0 2rpx 8rpx rgba(255, 107, 107, 0.4);
 }
 .person-info__wrapper {
   width: 100%;

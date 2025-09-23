@@ -1,0 +1,72 @@
+<view class="preview-container">
+  <view class="business-card">
+    <view class="card-header">
+      <view class="avatar">
+        <image src="{{businessCard.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill" />
+      </view>
+      <view class="user-info">
+        <view class="name">{{businessCard.nickName || '用户'}}</view>
+        <view class="position">{{businessCard.position}}</view>
+        <view class="company">{{businessCard.company}}</view>
+      </view>
+    </view>
+
+    <view class="card-content">
+      <view class="info-row" wx:if="{{businessCard.industry}}">
+        <view class="label">行业</view>
+        <view class="value">{{businessCard.industry}}</view>
+      </view>
+      
+      <view class="info-row" wx:if="{{businessCard.profession}}">
+        <view class="label">专业</view>
+        <view class="value">{{businessCard.profession}}</view>
+      </view>
+      
+      <view class="info-row" wx:if="{{businessCard.interests}}">
+        <view class="label">兴趣爱好</view>
+        <view class="value">{{businessCard.interests}}</view>
+      </view>
+      
+      <view class="info-row" wx:if="{{businessCard.email}}">
+        <view class="label">邮箱</view>
+        <view class="value">{{businessCard.email}}</view>
+      </view>
+      
+      <view class="info-row" wx:if="{{businessCard.phone}}">
+        <view class="label">电话</view>
+        <view class="value">{{businessCard.phone}}</view>
+      </view>
+      
+      <view class="info-row" wx:if="{{businessCard.wechat}}">
+        <view class="label">微信</view>
+        <view class="value">{{businessCard.wechat}}</view>
+      </view>
+    </view>
+
+    <view class="card-footer" wx:if="{{businessCard.introduction}}">
+      <view class="introduction">
+        <view class="intro-title">个人简介</view>
+        <view class="intro-content">{{businessCard.introduction}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="action-buttons">
+    <t-button
+      theme="light"
+      size="large"
+      bind:tap="onEdit"
+      class="edit-btn"
+    >
+      编辑名片
+    </t-button>
+    <t-button
+      theme="primary"
+      size="large"
+      bind:tap="onShare"
+      class="share-btn"
+    >
+      分享名片
+    </t-button>
+  </view>
+</view>

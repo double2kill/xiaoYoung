@@ -1,0 +1,133 @@
+<view class="business-card-container">
+  <view wx:if="{{loading}}" class="loading-container">
+    <t-loading theme="circular" size="40rpx" />
+    <text class="loading-text">加载名片数据中...</text>
+  </view>
+  
+  <view wx:else>
+    <view class="form-section">
+    <view class="section-title">基本信息</view>
+    
+    <view class="form-item">
+      <view class="form-label">行业 *</view>
+      <t-picker
+        value="{{industryOptions.indexOf(businessCard.industry)}}"
+        range="{{industryOptions}}"
+        bind:change="onIndustryChange"
+        placeholder="请选择行业"
+      >
+        <view class="picker-display">
+          {{businessCard.industry || '请选择行业'}}
+        </view>
+      </t-picker>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">专业 *</view>
+      <t-picker
+        value="{{professionOptions.indexOf(businessCard.profession)}}"
+        range="{{professionOptions}}"
+        bind:change="onProfessionChange"
+        placeholder="请选择专业"
+      >
+        <view class="picker-display">
+          {{businessCard.profession || '请选择专业'}}
+        </view>
+      </t-picker>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">职位 *</view>
+      <t-picker
+        value="{{positionOptions.indexOf(businessCard.position)}}"
+        range="{{positionOptions}}"
+        bind:change="onPositionChange"
+        placeholder="请选择职位"
+      >
+        <view class="picker-display">
+          {{businessCard.position || '请选择职位'}}
+        </view>
+      </t-picker>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">兴趣爱好</view>
+      <t-input
+        value="{{businessCard.interests}}"
+        placeholder="请输入兴趣爱好"
+        data-field="interests"
+        bind:change="onInputChange"
+      />
+    </view>
+  </view>
+
+  <view class="form-section">
+    <view class="section-title">详细信息</view>
+    
+    <view class="form-item">
+      <view class="form-label">公司</view>
+      <t-input
+        value="{{businessCard.company}}"
+        placeholder="请输入公司名称"
+        data-field="company"
+        bind:change="onInputChange"
+      />
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">邮箱</view>
+      <t-input
+        value="{{businessCard.email}}"
+        placeholder="请输入邮箱地址"
+        data-field="email"
+        bind:change="onInputChange"
+      />
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">电话</view>
+      <t-input
+        value="{{businessCard.phone}}"
+        placeholder="请输入电话号码"
+        data-field="phone"
+        bind:change="onInputChange"
+      />
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">微信</view>
+      <t-input
+        value="{{businessCard.wechat}}"
+        placeholder="请输入微信号"
+        data-field="wechat"
+        bind:change="onInputChange"
+      />
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">个人简介</view>
+      <t-textarea
+        value="{{businessCard.introduction}}"
+        placeholder="请输入个人简介"
+        data-field="introduction"
+        bind:change="onInputChange"
+        maxlength="200"
+        indicator
+      />
+    </view>
+  </view>
+
+  <view class="button-group">
+    <t-button
+      theme="primary"
+      size="large"
+      bind:tap="onSave"
+      class="save-btn"
+    >
+      保存名片
+    </t-button>
+  </view>
+  </view>
+</view>
+
+<t-toast id="t-toast" />

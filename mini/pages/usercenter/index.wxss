@@ -8,6 +8,31 @@ page {
   padding: 0 30rpx;
 }
 
+.business-card-section {
+  margin-bottom: 30rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.edit-btn {
+  min-width: 120rpx !important;
+}
+
 .cell-box {
   border-radius: 10rpx;
   overflow: hidden;
@@ -42,4 +67,46 @@ page {
 
 .cell-box .t-cell-padding {
   padding: 24rpx 18rpx 24rpx 32rpx;
+}
+
+.logout-btn {
+  position: absolute;
+  top: 20rpx;
+  right: 30rpx;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 12rpx 24rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: #666;
+  z-index: 10;
+}
+
+.login-prompt {
+  margin-top: 340rpx;
+  padding: 60rpx 30rpx;
+  text-align: center;
+  background: #fff;
+  margin-left: 30rpx;
+  margin-right: 30rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.login-prompt__text {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 40rpx;
+}
+
+.login-prompt__btn {
+  background: #0052d9;
+  color: #fff;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  padding: 20rpx 60rpx;
+  border: none;
+}
+
+.login-prompt__btn::after {
+  border: none;
 }

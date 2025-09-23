@@ -7,7 +7,36 @@
   currAuthStep="{{currAuthStep}}"
   bind:gotoUserEditPage="gotoUserEditPage"
 />
-<view class="content-wrapper">
+
+<view wx:if="{{!currentUser}}" class="login-prompt">
+  <view class="login-prompt__text">请先登录以使用完整功能</view>
+  <button class="login-prompt__btn" bindtap="gotoLogin">立即登录</button>
+</view>
+
+<view wx:if="{{currentUser}}" class="logout-btn" bindtap="onLogout">
+  <text>退出登录</text>
+</view>
+
+<view wx:if="{{currentUser}}" class="content-wrapper">
+  <view class="business-card-section">
+    <view class="section-header">
+      <text class="section-title">我的名片</text>
+      <t-button
+        theme="primary"
+        size="small"
+        bind:tap="onEditBusinessCard"
+        class="edit-btn"
+      >
+        编辑
+      </t-button>
+    </view>
+    <business-card-display 
+      business-card="{{businessCard}}" 
+      show-actions="{{false}}"
+      loading="{{businessCardLoading}}"
+    />
+  </view>
+  
   <view wx:for="{{menuData}}" wx:key="item" class="cell-box">
     <t-cell-group>
       <t-cell

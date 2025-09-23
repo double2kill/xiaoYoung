@@ -1,5 +1,6 @@
 import { fetchPerson } from '../../../services/usercenter/fetchPerson';
 import { phoneEncryption } from '../../../utils/util';
+import { logoutUser } from '../../../services/user/login';
 import Toast from 'tdesign-miniprogram/toast/index';
 
 Page({
@@ -118,5 +119,28 @@ Page({
         theme: 'error',
       });
     }
+  },
+
+  onLogout() {
+    wx.showModal({
+      title: '退出登录',
+      content: '确定要退出当前账号吗？',
+      success: (res) => {
+        if (res.confirm) {
+          logoutUser();
+          Toast({
+            context: this,
+            selector: '#t-toast',
+            message: '已退出登录',
+            theme: 'success',
+          });
+          setTimeout(() => {
+            wx.navigateTo({ 
+              url: '/pages/login/index' 
+            });
+          }, 1500);
+        }
+      }
+    });
   },
 });

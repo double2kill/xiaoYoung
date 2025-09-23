@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "个人名片",
+  "usingComponents": {
+    "t-picker": "tdesign-miniprogram/picker/picker",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-textarea": "tdesign-miniprogram/textarea/textarea",
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-toast": "tdesign-miniprogram/toast/toast"
+  }
+}

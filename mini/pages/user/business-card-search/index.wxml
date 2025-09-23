@@ -1,0 +1,113 @@
+<view class="search-container">
+  <view class="search-form">
+    <view class="form-item">
+      <view class="form-label">行业</view>
+      <t-picker
+        value="{{industryOptions.indexOf(searchQuery.industry)}}"
+        range="{{industryOptions}}"
+        bind:change="onIndustryChange"
+        placeholder="选择行业"
+      >
+        <view class="picker-display">
+          {{searchQuery.industry || '选择行业'}}
+        </view>
+      </t-picker>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">专业</view>
+      <t-picker
+        value="{{professionOptions.indexOf(searchQuery.profession)}}"
+        range="{{professionOptions}}"
+        bind:change="onProfessionChange"
+        placeholder="选择专业"
+      >
+        <view class="picker-display">
+          {{searchQuery.profession || '选择专业'}}
+        </view>
+      </t-picker>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">职位</view>
+      <t-picker
+        value="{{positionOptions.indexOf(searchQuery.position)}}"
+        range="{{positionOptions}}"
+        bind:change="onPositionChange"
+        placeholder="选择职位"
+      >
+        <view class="picker-display">
+          {{searchQuery.position || '选择职位'}}
+        </view>
+      </t-picker>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">关键词</view>
+      <t-input
+        value="{{searchQuery.keyword}}"
+        placeholder="输入姓名、公司等关键词"
+        bind:change="onKeywordInput"
+      />
+    </view>
+
+    <view class="search-buttons">
+      <t-button
+        theme="light"
+        size="large"
+        bind:tap="onClearSearch"
+        class="clear-btn"
+      >
+        清空
+      </t-button>
+      <t-button
+        theme="primary"
+        size="large"
+        bind:tap="onSearch"
+        class="search-btn"
+      >
+        搜索
+      </t-button>
+    </view>
+  </view>
+
+  <t-tabs
+    value="{{activeTab}}"
+    bind:change="onTabChange"
+    class="tabs"
+  >
+    <t-tab-panel value="recommend" label="推荐名片">
+      <view class="cards-list">
+        <view wx:if="{{recommendCards.length === 0}}" class="empty-state">
+          <text>暂无推荐名片</text>
+        </view>
+        <business-card-display
+          wx:for="{{recommendCards}}"
+          wx:key="id"
+          business-card="{{item}}"
+          show-actions="{{true}}"
+          bind:viewDetail="onCardClick"
+          data-card="{{item}}"
+        />
+      </view>
+    </t-tab-panel>
+    
+    <t-tab-panel value="search" label="搜索结果">
+      <view class="cards-list">
+        <view wx:if="{{searchResults.length === 0}}" class="empty-state">
+          <text>暂无搜索结果</text>
+        </view>
+        <business-card-display
+          wx:for="{{searchResults}}"
+          wx:key="id"
+          business-card="{{item}}"
+          show-actions="{{true}}"
+          bind:viewDetail="onCardClick"
+          data-card="{{item}}"
+        />
+      </view>
+    </t-tab-panel>
+  </t-tabs>
+</view>
+
+<t-toast id="t-toast" />

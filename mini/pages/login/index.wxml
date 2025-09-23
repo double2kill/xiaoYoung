@@ -1,0 +1,54 @@
+<view class="login-container">
+  <view class="login-header">
+    <view class="title">用户登录</view>
+    <view class="subtitle">请输入用户名进行登录</view>
+  </view>
+
+  <view class="login-form">
+    <view class="input-group">
+      <view class="input-label">用户名</view>
+      <view class="input-wrapper">
+        <input 
+          class="username-input" 
+          type="text" 
+          placeholder="请输入用户名或选择用户" 
+          value="{{username}}"
+          bindinput="onInputUsername"
+          maxlength="20"
+        />
+        <view class="dropdown-btn" bindtap="onShowUserList">
+          <text class="dropdown-icon">▼</text>
+        </view>
+      </view>
+      
+      <view wx:if="{{showUserList && userList.length > 0}}" class="user-dropdown">
+        <view 
+          wx:for="{{userList}}" 
+          wx:key="id" 
+          class="user-item {{selectedUser && selectedUser.id === item.id ? 'selected' : ''}}"
+          bindtap="onSelectUser"
+          data-user="{{item}}"
+        >
+          <view class="user-info">
+            <view class="user-name">{{item.name}}</view>
+            <view class="user-username">@{{item.username}}</view>
+          </view>
+          <view class="user-company">{{item.company}}</view>
+        </view>
+      </view>
+    </view>
+
+    <button 
+      class="login-btn {{loading ? 'loading' : ''}}" 
+      bindtap="onLogin"
+      disabled="{{loading}}"
+    >
+      <text wx:if="{{!loading}}">登录</text>
+      <text wx:else>登录中...</text>
+    </button>
+  </view>
+
+  <view class="login-footer">
+    <text class="tip">登录后即可使用所有功能</text>
+  </view>
+</view>
