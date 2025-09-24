@@ -26,6 +26,11 @@ export default defineConfig({
       path: '/user-list',
       component: './UserList',
     },
+    {
+      name: '校友会管理',
+      path: '/community',
+      component: './Community',
+    },
   ],
   npmClient: 'pnpm',
 });

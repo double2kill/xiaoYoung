@@ -13,7 +13,7 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<UserDocument> {
     const existingUser = await this.userModel.findOne({
       email: createUserDto.email,
     });
@@ -28,7 +28,7 @@ export class UserService {
   async findAll(
     page: number = 1,
     limit: number = 10,
-  ): Promise<{ users: User[]; total: number }> {
+  ): Promise<{ users: UserDocument[]; total: number }> {
     const skip = (page - 1) * limit;
     const [users, total] = await Promise.all([
       this.userModel.find().skip(skip).limit(limit).exec(),
@@ -38,7 +38,7 @@ export class UserService {
     return { users, total };
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOne(id: string): Promise<UserDocument> {
     const user = await this.userModel.findById(id).exec();
     if (!user) {
       throw new NotFoundException('用户不存在');
@@ -46,11 +46,14 @@ export class UserService {
     return user;
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<UserDocument | null> {
     return this.userModel.findOne({ email }).exec();
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserDocument> {
     if (updateUserDto.email) {
       const existingUser = await this.userModel.findOne({
         email: updateUserDto.email,
@@ -88,7 +91,7 @@ export class UserService {
       .exec();
   }
 
-  async findActiveUsers(): Promise<User[]> {
+  async findActiveUsers(): Promise<UserDocument[]> {
     return this.userModel.find({ isActive: true }).exec();
   }
 }
