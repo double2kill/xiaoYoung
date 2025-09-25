@@ -37,7 +37,9 @@ Page({
     
     try {
       wx.showLoading({ title: '加入中...' });
-      const result = await joinUserGroup(this.data.groupInfo.id);
+      // 这里需要获取当前用户ID，暂时使用模拟数据
+      const userId = 'current_user_id'; // 实际项目中应该从用户信息中获取
+      const result = await joinUserGroup(this.data.groupInfo.id, { userId });
       wx.hideLoading();
       
       if (result.code === 200) {

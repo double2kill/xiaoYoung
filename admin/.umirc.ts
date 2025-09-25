@@ -8,7 +8,7 @@ export default defineConfig({
   initialState: {},
   request: {},
   layout: {
-    title: '@umijs/max',
+    title: '管理后台',
   },
   proxy: proxy,
   routes: [
@@ -22,14 +22,29 @@ export default defineConfig({
       component: './Home',
     },
     {
+      name: '圈子',
+      path: '/groups',
+      component: './Groups',
+    },
+    {
+      name: '活动',
+      path: '/events',
+      component: './Events',
+    },
+    {
+      name: '动态',
+      path: '/dynamics',
+      component: './Dynamics',
+    },
+    {
+      name: '消息',
+      path: '/messages',
+      component: './Messages',
+    },
+    {
       name: '用户列表',
       path: '/user-list',
       component: './UserList',
-    },
-    {
-      name: '校友会管理',
-      path: '/community',
-      component: './Community',
     },
   ],
   npmClient: 'pnpm',

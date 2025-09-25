@@ -8,30 +8,6 @@ page {
   padding: 0 30rpx;
 }
 
-.business-card-section {
-  margin-bottom: 30rpx;
-  background: #fff;
-  border-radius: 20rpx;
-  padding: 30rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20rpx;
-}
-
-.section-title {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #333;
-}
-
-.edit-btn {
-  min-width: 120rpx !important;
-}
 
 .cell-box {
   border-radius: 10rpx;

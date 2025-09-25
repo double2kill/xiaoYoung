@@ -16,17 +16,18 @@
           <text class="stat-value">{{item.memberCount}}人</text>
         </view>
         <view class="stat-item">
-          <text class="stat-label">活跃度</text>
-          <view class="rating">
-            <text wx:for="{{item.rating}}" wx:for-item="star" wx:key="index" class="star {{star ? 'active' : ''}}">★</text>
-          </view>
+          <text class="stat-label">类型</text>
+          <text class="stat-value">{{item.groupType}}</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-label">状态</text>
+          <text class="stat-value status-{{item.status}}">{{item.status === 'approved' ? '已通过' : item.status === 'pending' ? '待审核' : '已拒绝'}}</text>
         </view>
       </view>
       
       <view class="group-footer">
-        <view class="contact-info">
-          <text class="contact-icon">👤</text>
-          <text class="contact-name">{{item.contactName}}</text>
+        <view class="group-meta">
+          <text class="meta-text">创建时间: {{item.createdAt}}</text>
         </view>
         <view class="arrow">></view>
       </view>

@@ -13,6 +13,13 @@ const menuData = [
       icon: 'chat',
     },
     {
+      title: '我的名片',
+      tit: '',
+      url: '',
+      type: 'business-card',
+      icon: 'user',
+    },
+    {
       title: '名片搜索',
       tit: '',
       url: '',
@@ -58,8 +65,6 @@ const getDefaultData = () => ({
   currAuthStep: 1,
   versionNo: '',
   currentUser: null,
-  businessCard: null,
-  businessCardLoading: false,
 });
 
 Page({
@@ -80,7 +85,6 @@ Page({
   init() {
     this.checkLoginStatus();
     this.fetUseriInfoHandle();
-    this.loadBusinessCard();
   },
 
   checkLoginStatus() {
@@ -132,6 +136,10 @@ Page({
           icon: '',
           duration: 1000,
         });
+        break;
+      }
+      case 'business-card': {
+        this.showBusinessCardPreview();
         break;
       }
       case 'card-search': {
@@ -209,38 +217,44 @@ Page({
     });
   },
 
-  async loadBusinessCard() {
+  async showBusinessCardPreview() {
     const currentUser = this.data.currentUser;
-    if (!currentUser) return;
-    
-    this.setData({ businessCardLoading: true });
-    
+    if (!currentUser) {
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '请先登录',
+        icon: '',
+        duration: 1000,
+      });
+      return;
+    }
+
     try {
+      wx.showLoading({ title: '加载中...' });
       const businessCard = await getBusinessCard(currentUser.id);
-      this.setData({ 
-        businessCard: {
-          ...businessCard,
-          nickName: currentUser?.username || '',
-          avatarUrl: currentUser?.avatarUrl || ''
-        },
-        businessCardLoading: false
+      const cardData = {
+        ...businessCard,
+        nickName: currentUser?.username || '',
+        avatarUrl: currentUser?.avatarUrl || ''
+      };
+      
+      const dataStr = encodeURIComponent(JSON.stringify(cardData));
+      wx.hideLoading();
+      wx.navigateTo({ 
+        url: `/pages/user/business-card-preview/index?data=${dataStr}` 
       });
     } catch (error) {
-      console.error('加载个人名片失败:', error);
-      const localCard = wx.getStorageSync('businessCard');
-      this.setData({ 
-        businessCard: {
-          ...localCard,
-          nickName: currentUser?.username || '',
-          avatarUrl: currentUser?.avatarUrl || ''
-        },
-        businessCardLoading: false
+      console.error('加载名片失败:', error);
+      wx.hideLoading();
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '加载名片失败',
+        icon: '',
+        duration: 1000,
       });
     }
-  },
-
-  onEditBusinessCard() {
-    wx.navigateTo({ url: '/pages/user/business-card/index' });
   },
 
   getVersionInfo() {

@@ -1,14 +1,27 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Query,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { UserService } from './services/user.service';
-import { CommunityService } from './services/community.service';
+import { GroupsService } from './services/groups.service';
+import { GroupMembersService } from './services/group-members.service';
+import { EventsService } from './services/events.service';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly userService: UserService,
-    private readonly communityService: CommunityService,
+    private readonly groupsService: GroupsService,
+    private readonly groupMembersService: GroupMembersService,
+    private readonly eventsService: EventsService,
   ) {}
 
   @Get()
@@ -51,22 +64,20 @@ export class AppController {
     }
   }
 
-  @Get('api/community')
-  async getCommunityForMini() {
+  @Get('api/groups')
+  async getGroupsForMini() {
     try {
-      const communities = await this.communityService.findAll();
+      const groups = await this.groupsService.findAll();
       return {
         code: 200,
-        data: communities.map((community) => ({
-          id: community._id,
-          name: community.name,
-          memberCount: community.memberCount,
-          rating: community.rating,
-          contactName: community.contactName,
-          contactPhone: community.contactPhone,
-          description: community.description,
-          createTime: community.createTime,
-          lastActiveTime: community.lastActiveTime,
+        data: groups.map((group) => ({
+          id: group._id,
+          name: group.name,
+          description: group.description,
+          groupType: group.groupType,
+          status: group.status,
+          memberCount: group.members.length,
+          createdAt: group.createdAt,
         })),
         message: '获取成功',
       };
@@ -74,28 +85,27 @@ export class AppController {
       return {
         code: 500,
         data: [],
-        message: '获取校友会列表失败',
+        message: '获取群组列表失败',
       };
     }
   }
 
-  @Get('api/community/:id')
-  async getCommunityDetailForMini(@Param('id') id: string) {
+  @Get('api/groups/:id')
+  async getGroupDetailForMini(@Param('id') id: string) {
     try {
-      const community = await this.communityService.findById(id);
-      if (community) {
+      const group = await this.groupsService.findById(id);
+      if (group) {
         return {
           code: 200,
           data: {
-            id: community._id,
-            name: community.name,
-            memberCount: community.memberCount,
-            rating: community.rating,
-            contactName: community.contactName,
-            contactPhone: community.contactPhone,
-            description: community.description,
-            createTime: community.createTime,
-            lastActiveTime: community.lastActiveTime,
+            id: group._id,
+            name: group.name,
+            description: group.description,
+            groupType: group.groupType,
+            status: group.status,
+            memberCount: group.members.length,
+            members: group.members,
+            createdAt: group.createdAt,
           },
           message: '获取成功',
         };
@@ -103,24 +113,27 @@ export class AppController {
         return {
           code: 404,
           data: null,
-          message: '校友会不存在',
+          message: '群组不存在',
         };
       }
     } catch (error) {
       return {
         code: 500,
         data: null,
-        message: '获取校友会详情失败',
+        message: '获取群组详情失败',
       };
     }
   }
 
-  @Post('api/community/:id/join')
-  async joinCommunityForMini(@Param('id') id: string) {
+  @Post('api/groups/:id/join')
+  async joinGroupForMini(
+    @Param('id') id: string,
+    @Body() body: { userId: string },
+  ) {
     try {
-      const community = await this.communityService.findById(id);
-      if (community) {
-        await this.communityService.join(id);
+      const group = await this.groupsService.findById(id);
+      if (group) {
+        await this.groupsService.joinGroup(id, body.userId);
         return {
           code: 200,
           data: { success: true },
@@ -130,7 +143,7 @@ export class AppController {
         return {
           code: 404,
           data: { success: false },
-          message: '校友会不存在',
+          message: '群组不存在',
         };
       }
     } catch (error) {
@@ -294,6 +307,184 @@ export class AppController {
           loginTime: new Date().toISOString(),
         },
         message: '登录成功',
+      };
+    }
+  }
+
+  @Get('admin/events')
+  async getAdminEvents(
+    @Query('groupId') groupId?: string,
+    @Query('status') status?: string,
+  ) {
+    try {
+      const events = await this.eventsService.findAll(groupId, status);
+      return {
+        code: 200,
+        data: events,
+        message: '获取活动列表成功',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        data: [],
+        message: '获取活动列表失败',
+      };
+    }
+  }
+
+  @Get('admin/events/:id')
+  async getAdminEventDetail(@Param('id') id: string) {
+    try {
+      const event = await this.eventsService.findOne(id);
+      return {
+        code: 200,
+        data: event,
+        message: '获取活动详情成功',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        data: null,
+        message: '获取活动详情失败',
+      };
+    }
+  }
+
+  @Post('admin/events')
+  async createAdminEvent(@Body() createEventDto: any) {
+    try {
+      console.log('创建活动数据:', createEventDto);
+      const event = await this.eventsService.create(createEventDto);
+      return {
+        code: 200,
+        data: event,
+        message: '创建活动成功',
+      };
+    } catch (error) {
+      console.error('创建活动失败:', error);
+      return {
+        code: 500,
+        data: null,
+        message: `创建活动失败: ${error.message || error}`,
+      };
+    }
+  }
+
+  @Patch('admin/events/:id')
+  async updateAdminEvent(@Param('id') id: string, @Body() updateEventDto: any) {
+    try {
+      const event = await this.eventsService.update(id, updateEventDto);
+      return {
+        code: 200,
+        data: event,
+        message: '更新活动成功',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        data: null,
+        message: '更新活动失败',
+      };
+    }
+  }
+
+  @Delete('admin/events/:id')
+  async deleteAdminEvent(@Param('id') id: string) {
+    try {
+      await this.eventsService.remove(id);
+      return {
+        code: 200,
+        data: null,
+        message: '归档活动成功',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        data: null,
+        message: '归档活动失败',
+      };
+    }
+  }
+
+  @Post('admin/events/:id/join')
+  async joinAdminEvent(@Param('id') id: string, @Body() joinEventDto: any) {
+    try {
+      const event = await this.eventsService.joinEvent(id, joinEventDto);
+      return {
+        code: 200,
+        data: event,
+        message: '参与活动成功',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        data: null,
+        message: '参与活动失败',
+      };
+    }
+  }
+
+  @Patch('admin/events/:eventId/participants/:userId/status')
+  async updateAdminParticipantStatus(
+    @Param('eventId') eventId: string,
+    @Param('userId') userId: string,
+    @Body('status') status: string,
+  ) {
+    try {
+      const event = await this.eventsService.updateParticipantStatus(
+        eventId,
+        userId,
+        status,
+      );
+      return {
+        code: 200,
+        data: event,
+        message: '更新参与者状态成功',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        data: null,
+        message: '更新参与者状态失败',
+      };
+    }
+  }
+
+  @Delete('admin/events/:eventId/participants/:userId')
+  async removeAdminParticipant(
+    @Param('eventId') eventId: string,
+    @Param('userId') userId: string,
+  ) {
+    try {
+      const event = await this.eventsService.removeParticipant(eventId, userId);
+      return {
+        code: 200,
+        data: event,
+        message: '移除参与者成功',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        data: null,
+        message: '移除参与者失败',
+      };
+    }
+  }
+
+  @Get('admin/events/user/:userId')
+  async getAdminEventsByUser(@Param('userId') userId: string) {
+    try {
+      const events = await this.eventsService.getEventsByUser(userId);
+      return {
+        code: 200,
+        data: events,
+        message: '获取用户活动成功',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        data: [],
+        message: '获取用户活动失败',
       };
     }
   }

@@ -1,7 +1,7 @@
-import { fetchCommunityList, fetchCommunityDetail, joinCommunity } from '../services/community/index';
+import { fetchGroupsList, fetchGroupDetail, joinGroup } from '../services/groups/index';
 
-export const getUserGroupList = fetchCommunityList;
+export const getUserGroupList = fetchGroupsList;
 
-export const getUserGroupDetail = fetchCommunityDetail;
+export const getUserGroupDetail = fetchGroupDetail;
 
-export const joinUserGroup = joinCommunity;
+export const joinUserGroup = joinGroup;

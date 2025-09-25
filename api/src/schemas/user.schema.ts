@@ -5,6 +5,9 @@ export type UserDocument = User & Document;
 
 @Schema({ timestamps: true })
 export class User {
+  @Prop({ required: true, unique: true })
+  id: string;
+
   @Prop({ required: true })
   name: string;
 
@@ -67,6 +70,13 @@ export class User {
 
   @Prop()
   lastLoginTime?: string;
+
+  @Prop({ default: false })
+  isDeleted: boolean;
+
+  @Prop()
+  deletedAt?: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.set('collection', 'users');

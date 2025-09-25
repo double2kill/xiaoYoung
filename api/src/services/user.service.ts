@@ -31,15 +31,21 @@ export class UserService {
   ): Promise<{ users: UserDocument[]; total: number }> {
     const skip = (page - 1) * limit;
     const [users, total] = await Promise.all([
-      this.userModel.find().skip(skip).limit(limit).exec(),
-      this.userModel.countDocuments().exec(),
+      this.userModel
+        .find({ isDeleted: { $ne: true } })
+        .skip(skip)
+        .limit(limit)
+        .exec(),
+      this.userModel.countDocuments({ isDeleted: { $ne: true } }).exec(),
     ]);
 
     return { users, total };
   }
 
   async findOne(id: string): Promise<UserDocument> {
-    const user = await this.userModel.findById(id).exec();
+    const user = await this.userModel
+      .findOne({ _id: id, isDeleted: { $ne: true } })
+      .exec();
     if (!user) {
       throw new NotFoundException('用户不存在');
     }
@@ -47,7 +53,7 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<UserDocument | null> {
-    return this.userModel.findOne({ email }).exec();
+    return this.userModel.findOne({ email, isDeleted: { $ne: true } }).exec();
   }
 
   async update(
@@ -76,7 +82,13 @@ export class UserService {
   }
 
   async remove(id: string): Promise<void> {
-    const result = await this.userModel.findByIdAndDelete(id).exec();
+    const result = await this.userModel
+      .findByIdAndUpdate(
+        id,
+        { isDeleted: true, deletedAt: new Date() },
+        { new: true },
+      )
+      .exec();
     if (!result) {
       throw new NotFoundException('用户不存在');
     }
@@ -92,6 +104,21 @@ export class UserService {
   }
 
   async findActiveUsers(): Promise<UserDocument[]> {
-    return this.userModel.find({ isActive: true }).exec();
+    return this.userModel
+      .find({ isActive: true, isDeleted: { $ne: true } })
+      .exec();
+  }
+
+  async restore(id: string): Promise<void> {
+    const result = await this.userModel
+      .findByIdAndUpdate(
+        id,
+        { isDeleted: false, deletedAt: null },
+        { new: true },
+      )
+      .exec();
+    if (!result) {
+      throw new NotFoundException('用户不存在');
+    }
   }
 }

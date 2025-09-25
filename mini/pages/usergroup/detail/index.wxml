@@ -15,34 +15,39 @@
         <text class="stat-value">{{groupInfo.memberCount}}人</text>
       </view>
       <view class="stat-item">
-        <text class="stat-label">活跃度</text>
-        <view class="rating">
-          <text wx:for="{{groupInfo.rating}}" wx:key="index" class="star {{item ? 'active' : ''}}">★</text>
-        </view>
+        <text class="stat-label">类型</text>
+        <text class="stat-value">{{groupInfo.groupType}}</text>
       </view>
-    </view>
-    
-    <view class="contact-info">
-      <view class="contact-item">
-        <text class="contact-icon">👤</text>
-        <text class="contact-label">联系人:</text>
-        <text class="contact-value">{{groupInfo.contactName}}</text>
-      </view>
-      <view class="contact-item">
-        <text class="contact-icon">📞</text>
-        <text class="contact-label">联系方式:</text>
-        <text class="contact-value">{{groupInfo.contactPhone}}</text>
+      <view class="stat-item">
+        <text class="stat-label">状态</text>
+        <text class="stat-value status-{{groupInfo.status}}">{{groupInfo.status === 'approved' ? '已通过' : groupInfo.status === 'pending' ? '待审核' : '已拒绝'}}</text>
       </view>
     </view>
     
     <view class="group-meta">
       <view class="meta-item">
         <text class="meta-label">创建时间:</text>
-        <text class="meta-value">{{groupInfo.createTime}}</text>
+        <text class="meta-value">{{groupInfo.createdAt}}</text>
       </view>
       <view class="meta-item">
-        <text class="meta-label">最后活跃:</text>
-        <text class="meta-value">{{groupInfo.lastActiveTime}}</text>
+        <text class="meta-label">创建者:</text>
+        <text class="meta-value">{{groupInfo.createdBy}}</text>
+      </view>
+    </view>
+    
+    <view wx:if="{{groupInfo.members && groupInfo.members.length > 0}}" class="members-info">
+      <view class="members-header">
+        <text class="members-title">成员列表</text>
+        <text class="members-count">({{groupInfo.members.length}}人)</text>
+      </view>
+      <view class="members-list">
+        <view wx:for="{{groupInfo.members}}" wx:key="userId" class="member-item">
+          <view class="member-info">
+            <text class="member-role">{{item.role === 'admin' ? '管理员' : '成员'}}</text>
+            <text class="member-status status-{{item.status}}">{{item.status === 'approved' ? '已通过' : '待审核'}}</text>
+          </view>
+          <view class="member-joined">加入时间: {{item.joinedAt}}</view>
+        </view>
       </view>
     </view>
     
