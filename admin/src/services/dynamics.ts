@@ -32,8 +32,9 @@ export interface ApiResponse<T> {
 export async function getDynamicsList(params?: {
   groupId?: string;
   authorId?: string;
+  status?: string;
 }): Promise<ApiResponse<DynamicItem[]>> {
-  return request('/dynamics', {
+  return request('/admin/dynamics', {
     params,
   });
 }
@@ -41,13 +42,13 @@ export async function getDynamicsList(params?: {
 export async function getDynamicDetail(
   id: string,
 ): Promise<ApiResponse<DynamicItem>> {
-  return request(`/dynamics/${id}`);
+  return request(`/admin/dynamics/${id}`);
 }
 
 export async function createDynamic(
   data: Partial<DynamicItem>,
 ): Promise<ApiResponse<any>> {
-  return request('/dynamics', {
+  return request('/admin/dynamics', {
     method: 'POST',
     data,
   });
@@ -57,14 +58,14 @@ export async function updateDynamic(
   id: string,
   data: Partial<DynamicItem>,
 ): Promise<ApiResponse<any>> {
-  return request(`/dynamics/${id}`, {
+  return request(`/admin/dynamics/${id}`, {
     method: 'PATCH',
     data,
   });
 }
 
 export async function deleteDynamic(id: string): Promise<ApiResponse<any>> {
-  return request(`/dynamics/${id}`, {
+  return request(`/admin/dynamics/${id}`, {
     method: 'DELETE',
   });
 }
@@ -73,7 +74,7 @@ export async function likeDynamic(
   id: string,
   data: { userId: string },
 ): Promise<ApiResponse<any>> {
-  return request(`/dynamics/${id}/like`, {
+  return request(`/admin/dynamics/${id}/like`, {
     method: 'POST',
     data,
   });
@@ -82,5 +83,5 @@ export async function likeDynamic(
 export async function getDynamicsByUser(
   userId: string,
 ): Promise<ApiResponse<DynamicItem[]>> {
-  return request(`/dynamics/user/${userId}`);
+  return request(`/admin/dynamics/user/${userId}`);
 }

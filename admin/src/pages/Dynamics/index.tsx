@@ -12,6 +12,7 @@ import {
 } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
+import { history } from '@umijs/max';
 import {
   Button,
   Descriptions,
@@ -32,13 +33,13 @@ const Dynamics: React.FC = () => {
     null,
   );
 
-  const handleDelete = async (id: string) => {
+  const handleArchive = async (id: string) => {
     try {
       await deleteDynamic(id);
-      message.success('删除成功');
+      message.success('归档成功');
       actionRef.current?.reload();
     } catch (error) {
-      message.error('删除失败');
+      message.error('归档失败');
     }
   };
 
@@ -71,7 +72,14 @@ const Dynamics: React.FC = () => {
       dataIndex: ['groupId', 'name'],
       key: 'groupName',
       width: 120,
-      render: (text: string) => text || '-',
+      render: (_, record) =>
+        record.groupId ? (
+          <a onClick={() => history.push(`/groups/${record.groupId._id}`)}>
+            {record.groupId.name}
+          </a>
+        ) : (
+          '-'
+        ),
     },
     {
       title: '图片数量',
@@ -83,21 +91,21 @@ const Dynamics: React.FC = () => {
     {
       title: '互动数据',
       key: 'interactions',
-      width: 150,
+      width: 200,
       render: (_, record) => (
-        <Space direction="vertical" size="small">
-          <div>
+        <Space size="middle">
+          <span>
             <HeartOutlined style={{ color: '#ff4d4f', marginRight: 4 }} />
             {record.likes}
-          </div>
-          <div>
+          </span>
+          <span>
             <MessageOutlined style={{ color: '#1890ff', marginRight: 4 }} />
             {record.comments}
-          </div>
-          <div>
+          </span>
+          <span>
             <ShareAltOutlined style={{ color: '#52c41a', marginRight: 4 }} />
             {record.shares}
-          </div>
+          </span>
         </Space>
       ),
     },
@@ -106,11 +114,23 @@ const Dynamics: React.FC = () => {
       dataIndex: 'status',
       key: 'status',
       width: 100,
+      valueType: 'select',
+      valueEnum: {
+        published: { text: '已发布', status: 'Success' },
+        draft: { text: '草稿', status: 'Warning' },
+        hidden: { text: '隐藏', status: 'Error' },
+        pending: { text: '待审核', status: 'Processing' },
+        approved: { text: '已通过', status: 'Success' },
+        rejected: { text: '已拒绝', status: 'Error' },
+      },
       render: (status: string) => {
         const statusMap = {
           published: { color: 'green', text: '已发布' },
           draft: { color: 'orange', text: '草稿' },
           hidden: { color: 'red', text: '隐藏' },
+          pending: { color: 'orange', text: '待审核' },
+          approved: { color: 'green', text: '已通过' },
+          rejected: { color: 'red', text: '已拒绝' },
         };
         const config = statusMap[status as keyof typeof statusMap] || {
           color: 'default',
@@ -124,7 +144,7 @@ const Dynamics: React.FC = () => {
       dataIndex: 'createdAt',
       key: 'createdAt',
       width: 180,
-      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm'),
+      render: (text: string) => dayjs(text).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: '操作',
@@ -142,12 +162,12 @@ const Dynamics: React.FC = () => {
             详情
           </Button>
           <Popconfirm
-            title="确定要删除这条动态吗？"
-            description="删除后无法恢复"
-            onConfirm={() => handleDelete(record._id)}
+            title="确定要归档这条动态吗？"
+            description="归档后动态将不再显示在列表中，但数据仍会保留"
+            onConfirm={() => handleArchive(record._id)}
           >
             <Button type="link" danger icon={<DeleteOutlined />} size="small">
-              删除
+              归档
             </Button>
           </Popconfirm>
         </Space>
@@ -169,6 +189,7 @@ const Dynamics: React.FC = () => {
           const response = await getDynamicsList({
             groupId: params.groupId,
             authorId: params.authorId,
+            status: params.status,
           });
           return {
             data: response.data,

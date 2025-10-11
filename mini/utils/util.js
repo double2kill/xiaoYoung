@@ -3,6 +3,36 @@ import dayjs from 'dayjs';
 const formatTime = (date, template) => dayjs(date).format(template);
 
 /**
+ * 格式化时间为友好的中文格式
+ * @param {string|Date} date 时间
+ * @param {string} type 格式类型: 'date' | 'datetime' | 'relative'
+ * @returns {string} 格式化后的时间字符串
+ */
+const formatTimeChinese = (date, type = 'date') => {
+  if (!date) return '';
+  
+  const now = dayjs();
+  const target = dayjs(date);
+  
+  if (type === 'relative') {
+    // 相对时间：刚刚、几分钟前、几小时前等
+    const diff = now.diff(target, 'minute');
+    if (diff < 1) return '刚刚';
+    if (diff < 60) return `${diff}分钟前`;
+    if (diff < 1440) return `${Math.floor(diff / 60)}小时前`;
+    if (diff < 10080) return `${Math.floor(diff / 1440)}天前`;
+    return target.format('YYYY-MM-DD');
+  }
+  
+  if (type === 'datetime') {
+    return target.format('YYYY年MM月DD日 HH:mm');
+  }
+  
+  // 默认date格式
+  return target.format('YYYY年MM月DD日');
+};
+
+/**
  * 格式化价格数额为字符串
  * 可对小数部分进行填充，默认不填充
  * @param price 价格数额，以分为单位!
@@ -124,6 +154,7 @@ const phoneRegCheck = (phone) => {
 
 module.exports = {
   formatTime,
+  formatTimeChinese,
   priceFormat,
   cosThumb,
   get,

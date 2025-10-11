@@ -299,4 +299,101 @@ export class GroupsController {
       };
     }
   }
+
+  @Put(':id/members/:userId/role')
+  async updateMemberRole(
+    @Param('id') id: string,
+    @Param('userId') userId: string,
+    @Body() body: { role: 'admin' | 'member' },
+  ) {
+    try {
+      const group = await this.groupsService.updateMemberRole(
+        id,
+        userId,
+        body.role,
+      );
+      if (group) {
+        return {
+          code: 200,
+          data: group,
+          message: '角色更新成功',
+        };
+      } else {
+        return {
+          code: 404,
+          data: null,
+          message: '群组或成员不存在',
+        };
+      }
+    } catch (error) {
+      return {
+        code: 400,
+        data: null,
+        message: error.message || '角色更新失败',
+      };
+    }
+  }
+
+  @Delete(':id/members/:userId')
+  async removeGroupMember(
+    @Param('id') id: string,
+    @Param('userId') userId: string,
+  ) {
+    try {
+      const group = await this.groupsService.removeGroupMember(id, userId);
+      if (group) {
+        return {
+          code: 200,
+          data: group,
+          message: '移除成员成功',
+        };
+      } else {
+        return {
+          code: 404,
+          data: null,
+          message: '群组不存在',
+        };
+      }
+    } catch (error) {
+      return {
+        code: 400,
+        data: null,
+        message: error.message || '移除成员失败',
+      };
+    }
+  }
+
+  @Put(':id/members/:userId/status')
+  async updateMemberStatus(
+    @Param('id') id: string,
+    @Param('userId') userId: string,
+    @Body() body: { status: 'approved' | 'rejected' },
+  ) {
+    try {
+      const group = await this.groupsService.updateMemberStatus(
+        id,
+        userId,
+        body.status,
+      );
+      if (group) {
+        return {
+          code: 200,
+          data: group,
+          message: '状态更新成功',
+        };
+      } else {
+        return {
+          code: 404,
+          data: null,
+          message: '群组或成员不存在',
+        };
+      }
+    } catch (error) {
+      return {
+        code: 400,
+        data: null,
+        message: error.message || '状态更新失败',
+      };
+    }
+  }
 }

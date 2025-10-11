@@ -4,21 +4,21 @@ page {
 }
 
 .container {
-  padding: 40rpx;
-  padding-bottom: 200rpx;
+  padding: 20rpx;
+  padding-bottom: 120rpx;
   background-color: #f5f5f5;
-  min-height: calc(100vh - 80rpx);
+  min-height: calc(100vh - 40rpx);
 }
 
 .group-detail {
   background-color: #fff;
   border-radius: 20rpx;
-  padding: 40rpx;
+  padding: 30rpx;
   box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
 }
 
 .group-header {
-  margin-bottom: 40rpx;
+  margin-bottom: 30rpx;
 }
 
 .group-name {
@@ -38,8 +38,8 @@ page {
 .group-stats {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 40rpx;
-  padding: 30rpx 0;
+  margin-bottom: 30rpx;
+  padding: 25rpx 0;
   border-top: 1rpx solid #eee;
   border-bottom: 1rpx solid #eee;
 }
@@ -108,12 +108,12 @@ page {
 }
 
 .group-meta {
-  margin-bottom: 40rpx;
+  margin-bottom: 30rpx;
   padding-top: 20rpx;
   border-top: 1rpx solid #eee;
   display: flex;
   flex-direction: column;
-  gap: 15rpx;
+  gap: 12rpx;
 }
 
 .meta-item {
@@ -132,9 +132,81 @@ page {
   color: #666;
 }
 
+.members-info {
+  margin-bottom: 30rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.members-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.members-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.members-count {
+  font-size: 24rpx;
+  color: #666;
+  margin-left: 10rpx;
+}
+
+.members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+}
+
+.member-item {
+  padding: 20rpx;
+  background-color: #f8f9fa;
+  border-radius: 12rpx;
+  border: 1rpx solid #e9ecef;
+}
+
+.member-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.member-role {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.member-status {
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+
+.member-status.status-approved {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.member-status.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.member-joined {
+  font-size: 22rpx;
+  color: #666;
+}
+
 .action-buttons {
   display: flex;
   gap: 20rpx;
+  margin-top: 20rpx;
 }
 
 .join-btn {

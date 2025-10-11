@@ -13,7 +13,7 @@ import { DynamicsService } from '../services/dynamics.service';
 import { CreateDynamicDto } from '../dto/create-dynamic.dto';
 import { UpdateDynamicDto } from '../dto/update-dynamic.dto';
 
-@Controller('dynamics')
+@Controller('admin/dynamics')
 export class DynamicsController {
   constructor(private readonly dynamicsService: DynamicsService) {}
 
@@ -23,11 +23,29 @@ export class DynamicsController {
   }
 
   @Get()
-  findAll(
+  async findAll(
     @Query('groupId') groupId?: string,
     @Query('authorId') authorId?: string,
+    @Query('status') status?: string,
   ) {
-    return this.dynamicsService.findAll(groupId, authorId);
+    try {
+      const dynamics = await this.dynamicsService.findAll(
+        groupId,
+        authorId,
+        status,
+      );
+      return {
+        code: 200,
+        data: dynamics,
+        message: '获取成功',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        data: [],
+        message: '获取动态列表失败',
+      };
+    }
   }
 
   @Get('user/:userId')
@@ -36,8 +54,21 @@ export class DynamicsController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.dynamicsService.findOne(id);
+  async findOne(@Param('id', ParseObjectIdPipe) id: string) {
+    try {
+      const dynamic = await this.dynamicsService.findOne(id);
+      return {
+        code: 200,
+        data: dynamic,
+        message: '获取成功',
+      };
+    } catch (error) {
+      return {
+        code: 404,
+        data: null,
+        message: '动态不存在',
+      };
+    }
   }
 
   @Patch(':id')
@@ -49,8 +80,21 @@ export class DynamicsController {
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.dynamicsService.remove(id);
+  async remove(@Param('id', ParseObjectIdPipe) id: string) {
+    try {
+      await this.dynamicsService.remove(id);
+      return {
+        code: 200,
+        data: null,
+        message: '归档成功',
+      };
+    } catch (error) {
+      return {
+        code: 404,
+        data: null,
+        message: '动态不存在或已归档',
+      };
+    }
   }
 
   @Post(':id/like')

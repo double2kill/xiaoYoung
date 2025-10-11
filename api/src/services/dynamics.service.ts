@@ -28,7 +28,11 @@ export class DynamicsService {
     return dynamic.save();
   }
 
-  async findAll(groupId?: string, authorId?: string): Promise<Dynamic[]> {
+  async findAll(
+    groupId?: string,
+    authorId?: string,
+    status?: string,
+  ): Promise<Dynamic[]> {
     const filter: any = { isDeleted: false };
 
     if (groupId) {
@@ -37,6 +41,10 @@ export class DynamicsService {
 
     if (authorId) {
       filter.authorId = new Types.ObjectId(authorId);
+    }
+
+    if (status) {
+      filter.status = status;
     }
 
     return this.dynamicModel

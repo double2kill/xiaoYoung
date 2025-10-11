@@ -88,23 +88,20 @@ export async function updateGroupStatus(
 }
 
 export interface GroupMemberItem {
-  _id: string;
-  groupId: string;
-  userId: {
-    _id: string;
+  _id?: string;
+  userId: string;
+  user: {
+    id: string;
     name: string;
     username: string;
     email: string;
     avatar?: string;
     company?: string;
     position?: string;
-  };
+  } | null;
   role: 'admin' | 'member';
   status: 'approved' | 'pending' | 'rejected';
   joinedAt: string;
-  approvedAt?: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export async function getGroupMembers(
@@ -155,4 +152,15 @@ export interface UserItem {
 
 export async function getUserList(): Promise<ApiResponse<UserItem[]>> {
   return request('/admin/user-list');
+}
+
+export async function updateMemberRole(
+  groupId: string,
+  userId: string,
+  data: { role: 'admin' | 'member' },
+): Promise<ApiResponse<any>> {
+  return request(`/admin/groups/${groupId}/members/${userId}/role`, {
+    method: 'PUT',
+    data,
+  });
 }

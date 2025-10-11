@@ -115,10 +115,10 @@ export class GroupsService {
           .exec();
 
         return {
-          _id: (member as any)._id?.toString() || '',
+          userId: String(member.userId),
           user: user
             ? {
-                _id: user.id.toString(),
+                id: String(user.id),
                 name: user.name,
                 username: user.username,
                 email: user.email,
@@ -230,6 +230,39 @@ export class GroupsService {
       .findByIdAndUpdate(
         id,
         { isDeleted: false, deletedAt: null },
+        { new: true },
+      )
+      .exec();
+  }
+
+  async updateMemberRole(
+    groupId: string,
+    userId: string,
+    role: 'admin' | 'member',
+  ) {
+    const group = await this.groupModel.findById(groupId).exec();
+    if (!group) {
+      throw new Error('圈子不存在');
+    }
+
+    const memberExists = group.members.find(
+      (member) => member.userId.toString() === userId,
+    );
+    if (!memberExists) {
+      throw new Error('成员不存在');
+    }
+
+    return this.groupModel
+      .findOneAndUpdate(
+        {
+          _id: groupId,
+          'members.userId': new Types.ObjectId(userId),
+        },
+        {
+          $set: {
+            'members.$.role': role,
+          },
+        },
         { new: true },
       )
       .exec();

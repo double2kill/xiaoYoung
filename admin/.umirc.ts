@@ -27,9 +27,21 @@ export default defineConfig({
       component: './Groups',
     },
     {
+      name: '圈子详情',
+      path: '/groups/:id',
+      component: './Groups/Detail',
+      hideInMenu: true,
+    },
+    {
       name: '活动',
       path: '/events',
       component: './Events',
+    },
+    {
+      name: '活动详情',
+      path: '/events/:id',
+      component: './Events/Detail',
+      hideInMenu: true,
     },
     {
       name: '动态',

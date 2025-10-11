@@ -1,4 +1,5 @@
 import { getUserGroupDetail, joinUserGroup } from '../../../model/usergroup';
+import { formatTimeChinese } from '../../../utils/util';
 
 Page({
   data: {
@@ -11,8 +12,18 @@ Page({
       this.setData({ loading: true });
       const result = await getUserGroupDetail(id);
       if (result.code === 200 && result.data) {
+        // 格式化时间
+        const formattedData = {
+          ...result.data,
+          createdAt: formatTimeChinese(result.data.createdAt, 'datetime'),
+          members: result.data.members ? result.data.members.map(member => ({
+            ...member,
+            joinedAt: formatTimeChinese(member.joinedAt, 'date')
+          })) : []
+        };
+        
         this.setData({
-          groupInfo: result.data,
+          groupInfo: formattedData,
           loading: false
         });
       } else {
@@ -68,7 +79,7 @@ Page({
 
   onLoad(options) {
     if (options.id) {
-      this.loadGroupDetail(parseInt(options.id));
+      this.loadGroupDetail(options.id);
     } else {
       this.setData({ loading: false });
       wx.showToast({

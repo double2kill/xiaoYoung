@@ -7,17 +7,13 @@ import {
   getUserList,
   removeGroupMember,
   updateGroup,
+  updateMemberRole,
   updateMemberStatus,
   type GroupItem,
   type GroupMemberItem,
   type UserItem,
 } from '@/services/groups';
-import {
-  DeleteOutlined,
-  EditOutlined,
-  PlusOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   PageContainer,
@@ -28,7 +24,9 @@ import {
   ProFormTextArea,
   ProTable,
 } from '@ant-design/pro-components';
+import { history } from '@umijs/max';
 import { Button, message, Modal, Popconfirm, Space, Tag } from 'antd';
+import dayjs from 'dayjs';
 import React, { useRef, useState } from 'react';
 
 const Groups: React.FC = () => {
@@ -157,6 +155,25 @@ const Groups: React.FC = () => {
     }
   };
 
+  const handleSetAdmin = async (userId: string, currentRole: string) => {
+    const newRole = currentRole === 'admin' ? 'member' : 'admin';
+    try {
+      const result = await updateMemberRole(currentGroupId, userId, {
+        role: newRole,
+      });
+      if (result.code === 200) {
+        message.success(
+          newRole === 'admin' ? '设置管理员成功' : '取消管理员成功',
+        );
+        fetchGroupMembers(currentGroupId);
+      } else {
+        message.error(result.message || '角色更新失败');
+      }
+    } catch (error) {
+      message.error('网络错误');
+    }
+  };
+
   const fetchUsers = async () => {
     setUserLoading(true);
     try {
@@ -204,6 +221,11 @@ const Groups: React.FC = () => {
       dataIndex: 'name',
       key: 'name',
       width: 200,
+      render: (_, record) => (
+        <a onClick={() => history.push(`/groups/${record._id}`)}>
+          {record.name}
+        </a>
+      ),
     },
     {
       title: '描述',
@@ -226,23 +248,17 @@ const Groups: React.FC = () => {
       render: (_, record) => renderStatus(record.status),
     },
     {
-      title: '成员信息',
-      dataIndex: 'members',
-      key: 'members',
-      width: 150,
-      render: (_, record) => renderMembers(record.members),
-    },
-    {
       title: '创建时间',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      width: 150,
-      render: (_, record) => new Date(record.createdAt).toLocaleDateString(),
+      width: 180,
+      render: (_, record) =>
+        dayjs(record.createdAt).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: '操作',
       key: 'action',
-      width: 250,
+      width: 150,
       render: (_, record) => (
         <Space>
           <Button
@@ -251,13 +267,6 @@ const Groups: React.FC = () => {
             onClick={() => handleEdit(record)}
           >
             编辑
-          </Button>
-          <Button
-            type="link"
-            icon={<UserOutlined />}
-            onClick={() => handleMemberManage(record)}
-          >
-            成员管理
           </Button>
           <Popconfirm
             title="确定要归档这个圈子吗？"
@@ -373,7 +382,7 @@ const Groups: React.FC = () => {
           setMembers([]);
         }}
         footer={null}
-        width={800}
+        width={1200}
       >
         <div style={{ marginBottom: 16 }}>
           <Button
@@ -390,7 +399,7 @@ const Groups: React.FC = () => {
         <ProTable<GroupMemberItem>
           dataSource={members}
           loading={memberLoading}
-          rowKey="_id"
+          rowKey="userId"
           search={false}
           pagination={false}
           columns={[
@@ -453,7 +462,7 @@ const Groups: React.FC = () => {
                       type="link"
                       size="small"
                       onClick={() =>
-                        updateMemberStatus(currentGroupId, record.user?._id, {
+                        updateMemberStatus(currentGroupId, record.userId, {
                           status: 'approved',
                         }).then(() => {
                           message.success('审批成功');
@@ -464,9 +473,16 @@ const Groups: React.FC = () => {
                       批准
                     </Button>
                   )}
+                  <Button
+                    type="link"
+                    size="small"
+                    onClick={() => handleSetAdmin(record.userId, record.role)}
+                  >
+                    {record.role === 'admin' ? '取消管理员' : '设为管理员'}
+                  </Button>
                   <Popconfirm
                     title="确定要移除这个成员吗？"
-                    onConfirm={() => handleRemoveMember(record.user?._id)}
+                    onConfirm={() => handleRemoveMember(record.userId)}
                     okText="确定"
                     cancelText="取消"
                   >

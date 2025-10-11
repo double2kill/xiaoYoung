@@ -1,4 +1,5 @@
 import { getUserGroupList } from '../../model/usergroup';
+import { formatTimeChinese } from '../../utils/util';
 
 Page({
   data: {
@@ -8,18 +9,20 @@ Page({
 
   async loadGroupList() {
     try {
-      console.log('开始加载圈子列表...');
       this.setData({ loading: true });
       const result = await getUserGroupList();
-      console.log('API返回结果:', result);
       if (result.code === 200) {
+        // 格式化时间
+        const formattedData = result.data.map(item => ({
+          ...item,
+          createdAt: formatTimeChinese(item.createdAt, 'date')
+        }));
+        
         this.setData({
-          groupList: result.data,
+          groupList: formattedData,
           loading: false
         });
-        console.log('圈子列表加载成功，数据:', result.data);
       } else {
-        console.error('API返回错误:', result);
         this.setData({ loading: false });
       }
     } catch (error) {
@@ -34,12 +37,17 @@ Page({
 
   onGroupTap(e) {
     const id = e.currentTarget.dataset.id;
-    console.log('点击圈子ID:', id);
+    
+    if (!id) {
+      wx.showToast({
+        title: '圈子ID错误',
+        icon: 'none'
+      });
+      return;
+    }
+    
     wx.navigateTo({
       url: `/pages/usergroup/detail/index?id=${id}`,
-      success: () => {
-        console.log('跳转成功');
-      },
       fail: (err) => {
         console.error('跳转失败:', err);
         wx.showToast({

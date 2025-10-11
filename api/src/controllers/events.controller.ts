@@ -14,7 +14,7 @@ import { CreateEventDto } from '../dto/create-event.dto';
 import { UpdateEventDto } from '../dto/update-event.dto';
 import { JoinEventDto } from '../dto/join-event.dto';
 
-@Controller('events')
+@Controller('admin/events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
