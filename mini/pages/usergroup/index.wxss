@@ -78,6 +78,14 @@ page {
   color: #333;
 }
 
+.stat-value.joined {
+  color: #52c41a;
+  background-color: #f6ffed;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  border: 1rpx solid #b7eb8f;
+}
+
 .rating {
   display: flex;
   gap: 6rpx;
@@ -96,7 +104,10 @@ page {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 15rpx;
 }
+
 
 .contact-info {
   display: flex;

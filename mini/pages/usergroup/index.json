@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "圈子",
-  "usingComponents": {}
+  "usingComponents": {
+    "user-avatar": "/components/user-avatar/index"
+  }
 }

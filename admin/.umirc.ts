@@ -58,6 +58,12 @@ export default defineConfig({
       path: '/user-list',
       component: './UserList',
     },
+    {
+      name: '用户详情',
+      path: '/users/:id',
+      component: './UserList/Detail',
+      hideInMenu: true,
+    },
   ],
   npmClient: 'pnpm',
 });

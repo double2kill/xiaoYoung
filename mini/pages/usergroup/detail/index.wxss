@@ -50,6 +50,19 @@ page {
   align-items: center;
 }
 
+.stat-item.clickable {
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.stat-item.clickable:active {
+  transform: scale(0.95);
+  background-color: #f0f0f0;
+  border-radius: 8rpx;
+  padding: 10rpx;
+}
+
 .stat-label {
   font-size: 24rpx;
   color: #666;
@@ -60,6 +73,15 @@ page {
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
+}
+
+.stat-arrow {
+  position: absolute;
+  right: -20rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24rpx;
+  color: #999;
 }
 
 .rating {
@@ -107,6 +129,66 @@ page {
   flex: 1;
 }
 
+.creator-info {
+  margin-bottom: 30rpx;
+  padding: 25rpx;
+  background-color: #f8f9fa;
+  border-radius: 16rpx;
+  border: 1rpx solid #e9ecef;
+}
+
+.creator-header {
+  margin-bottom: 20rpx;
+}
+
+.creator-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.creator-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.creator-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2rpx solid #e9ecef;
+}
+
+.creator-avatar image {
+  width: 100%;
+  height: 100%;
+}
+
+.creator-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.creator-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.creator-company {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.creator-position {
+  font-size: 22rpx;
+  color: #999;
+}
+
 .group-meta {
   margin-bottom: 30rpx;
   padding-top: 20rpx;
@@ -141,7 +223,16 @@ page {
 .members-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 20rpx;
+  padding: 10rpx;
+  border-radius: 8rpx;
+  background-color: #f8f9fa;
+  transition: background-color 0.3s ease;
+}
+
+.members-header:active {
+  background-color: #e9ecef;
 }
 
 .members-title {
@@ -150,10 +241,20 @@ page {
   color: #333;
 }
 
+.members-count-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
 .members-count {
   font-size: 24rpx;
   color: #666;
-  margin-left: 10rpx;
+}
+
+.view-more {
+  font-size: 22rpx;
+  color: #007bff;
 }
 
 .members-list {
@@ -163,17 +264,24 @@ page {
 }
 
 .member-item {
-  padding: 20rpx;
+  padding: 15rpx;
   background-color: #f8f9fa;
   border-radius: 12rpx;
   border: 1rpx solid #e9ecef;
 }
 
-.member-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8rpx;
+.more-members {
+  padding: 15rpx;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 12rpx;
+  border: 1rpx solid #e9ecef;
+  margin-top: 10rpx;
+}
+
+.more-text {
+  font-size: 24rpx;
+  color: #666;
 }
 
 .member-role {
@@ -220,8 +328,130 @@ page {
   font-weight: bold;
 }
 
+
 .join-btn:active {
   background-color: #0056cc;
+}
+
+/* 新的布局样式 */
+.group-info-section {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.events-section,
+.dynamics-section {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.section-more {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.member-count,
+.event-count,
+.dynamic-count {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.view-more {
+  font-size: 24rpx;
+  color: #1890ff;
+}
+
+
+.events-preview,
+.dynamics-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+}
+
+.event-item,
+.dynamic-item {
+  padding: 20rpx;
+  background-color: #f8f9fa;
+  border-radius: 12rpx;
+  border-left: 4rpx solid #1890ff;
+}
+
+.event-title,
+.dynamic-content {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+  line-height: 1.4;
+}
+
+.event-meta,
+.dynamic-meta {
+  display: flex;
+  gap: 20rpx;
+  font-size: 22rpx;
+  color: #666;
+}
+
+.event-time,
+.event-location,
+.dynamic-author,
+.dynamic-time {
+  font-size: 22rpx;
+  color: #666;
+}
+
+.empty-content {
+  text-align: center;
+  padding: 40rpx;
+  color: #999;
+  font-size: 24rpx;
+}
+
+.fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.08);
+  z-index: 100;
+}
+
+.fixed-bottom .join-btn {
+  width: 100%;
+  background-color: #1890ff;
+  color: #fff;
+  border: none;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  font-size: 28rpx;
+  font-weight: bold;
 }
 
 .loading {
@@ -241,3 +471,4 @@ page {
   font-size: 28rpx;
   color: #999;
 }
+

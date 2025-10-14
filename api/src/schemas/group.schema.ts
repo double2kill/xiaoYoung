@@ -14,7 +14,7 @@ export class Group {
   @Prop({ required: true })
   groupType: string;
 
-  @Prop({ required: true, type: Types.ObjectId })
+  @Prop({ required: true, type: Types.ObjectId, ref: 'User' })
   createdBy: Types.ObjectId;
 
   @Prop({
@@ -27,7 +27,7 @@ export class Group {
   @Prop({
     type: [
       {
-        userId: { type: Types.ObjectId, ref: 'User', required: true },
+        userId: { type: String, required: true },
         role: { type: String, enum: ['admin', 'member'], required: true },
         status: { type: String, enum: ['approved', 'pending'], required: true },
         joinedAt: { type: Date, default: Date.now },
@@ -36,7 +36,7 @@ export class Group {
     default: [],
   })
   members: Array<{
-    userId: Types.ObjectId;
+    userId: string;
     role: 'admin' | 'member';
     status: 'approved' | 'pending';
     joinedAt: Date;

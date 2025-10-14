@@ -29,9 +29,13 @@
           bindtap="onSelectUser"
           data-user="{{item}}"
         >
+          <view class="user-avatar">
+            <image src="{{item.avatar || '/images/default-avatar.svg'}}" mode="aspectFill" />
+          </view>
           <view class="user-info">
             <view class="user-name">{{item.name}}</view>
             <view class="user-username">@{{item.username}}</view>
+            <view class="user-position">{{item.position}}</view>
           </view>
           <view class="user-company">{{item.company}}</view>
         </view>

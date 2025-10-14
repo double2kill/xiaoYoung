@@ -1,7 +1,8 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
-import { request } from '@umijs/max';
+import { history, request } from '@umijs/max';
 import {
+  Avatar,
   Button,
   Form,
   Input,
@@ -89,12 +90,19 @@ const UserList = () => {
     }
   };
 
+  const handleViewDetail = (userId: string) => {
+    history.push(`/users/${userId}`);
+  };
+
   const columns = [
     {
       title: '用户名',
       dataIndex: 'username',
       key: 'username',
       width: 120,
+      render: (username: string, record: any) => (
+        <a onClick={() => handleViewDetail(record.id)}>{username}</a>
+      ),
     },
     {
       title: '邮箱',
@@ -107,30 +115,38 @@ const UserList = () => {
       key: 'profile',
       width: 300,
       render: (record: any) => (
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Avatar
+            size={40}
+            src={record.avatar || '/images/default-avatar.png'}
+            icon={<UserOutlined />}
+            style={{ marginRight: 12 }}
+          />
           <div>
-            <strong>姓名:</strong> {record.name}
+            <div>
+              <strong>姓名:</strong> {record.name}
+            </div>
+            {record.company && (
+              <div>
+                <strong>公司:</strong> {record.company}
+              </div>
+            )}
+            {record.position && (
+              <div>
+                <strong>职位:</strong> {record.position}
+              </div>
+            )}
+            {record.industry && (
+              <div>
+                <strong>行业:</strong> {record.industry}
+              </div>
+            )}
+            {record.phone && (
+              <div>
+                <strong>电话:</strong> {record.phone}
+              </div>
+            )}
           </div>
-          {record.company && (
-            <div>
-              <strong>公司:</strong> {record.company}
-            </div>
-          )}
-          {record.position && (
-            <div>
-              <strong>职位:</strong> {record.position}
-            </div>
-          )}
-          {record.industry && (
-            <div>
-              <strong>行业:</strong> {record.industry}
-            </div>
-          )}
-          {record.phone && (
-            <div>
-              <strong>电话:</strong> {record.phone}
-            </div>
-          )}
         </div>
       ),
     },
@@ -276,6 +292,10 @@ const UserList = () => {
 
           <Form.Item name="phone" label="电话">
             <Input placeholder="请输入电话（可选）" />
+          </Form.Item>
+
+          <Form.Item name="avatar" label="头像URL">
+            <Input placeholder="请输入头像链接（可选）" />
           </Form.Item>
 
           <Form.Item name="company" label="公司">

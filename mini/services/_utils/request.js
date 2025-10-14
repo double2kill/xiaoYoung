@@ -11,7 +11,7 @@ export const request = (options) => {
         ...options.header,
       },
       success: (res) => {
-        if (res.statusCode === 200) {
+        if (res.statusCode === 200 || res.statusCode === 201) {
           resolve(res.data);
         } else {
           reject(new Error(`请求失败: ${res.statusCode}`));

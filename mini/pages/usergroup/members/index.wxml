@@ -1,0 +1,38 @@
+<view class="container">
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+  
+  <view wx:elif="{{members.length > 0}}" class="members-container">
+    <view class="members-header">
+      <text class="members-title">{{groupInfo.name}} - 成员列表</text>
+      <text class="members-count">{{members.length}}人</text>
+    </view>
+    
+    <view class="members-list">
+      <view wx:for="{{members}}" wx:key="userId" class="member-item">
+        <user-avatar
+          avatar="{{item.userInfo.avatar}}"
+          name="{{item.userInfo.name}}"
+          username="{{item.userInfo.username}}"
+          company="{{item.userInfo.company}}"
+          size="medium"
+          show-name="{{true}}"
+          show-company="{{true}}"
+        />
+        <view class="member-status">
+          <view class="status-badge status-{{item.status}}">
+            {{item.status === 'approved' ? '已通过' : '待审核'}}
+          </view>
+          <view class="role-badge role-{{item.role}}">
+            {{item.role === 'admin' ? '管理员' : '成员'}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view wx:else class="empty">
+    <text>暂无成员</text>
+  </view>
+</view>

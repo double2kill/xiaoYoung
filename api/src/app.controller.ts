@@ -7,12 +7,15 @@ import {
   Query,
   Patch,
   Delete,
+  Put,
+  HttpCode,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { UserService } from './services/user.service';
 import { GroupsService } from './services/groups.service';
 import { GroupMembersService } from './services/group-members.service';
 import { EventsService } from './services/events.service';
+import { DynamicsService } from './services/dynamics.service';
 
 @Controller()
 export class AppController {
@@ -22,6 +25,7 @@ export class AppController {
     private readonly groupsService: GroupsService,
     private readonly groupMembersService: GroupMembersService,
     private readonly eventsService: EventsService,
+    private readonly dynamicsService: DynamicsService,
   ) {}
 
   @Get()
@@ -64,6 +68,65 @@ export class AppController {
     }
   }
 
+  @Get('admin/users/:id')
+  async getUserDetail(@Param('id') id: string) {
+    try {
+      const user = await this.userService.findOne(id);
+      return {
+        code: 200,
+        data: {
+          id: user._id,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          phone: user.phone,
+          avatar: user.avatar,
+          company: user.company,
+          position: user.position,
+          department: user.department,
+          wechatId: user.wechatId,
+          industry: user.industry,
+          profession: user.profession,
+          interests: user.interests,
+          experience: user.experience,
+          tags: user.tags,
+          status: user.status,
+          role: user.role,
+          isActive: user.isActive,
+          loginCount: user.loginCount,
+          createTime: user.createTime,
+          lastLoginTime: user.lastLoginTime,
+          isDeleted: user.isDeleted,
+        },
+        message: '获取用户详情成功',
+      };
+    } catch (error) {
+      return {
+        code: 404,
+        data: null,
+        message: '用户不存在',
+      };
+    }
+  }
+
+  @Put('admin/users/:id')
+  async updateUser(@Param('id') id: string, @Body() updateData: any) {
+    try {
+      const user = await this.userService.update(id, updateData);
+      return {
+        code: 200,
+        data: user,
+        message: '用户信息更新成功',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        data: null,
+        message: '用户信息更新失败',
+      };
+    }
+  }
+
   @Get('api/groups')
   async getGroupsForMini() {
     try {
@@ -77,7 +140,48 @@ export class AppController {
           groupType: group.groupType,
           status: group.status,
           memberCount: group.members.length,
+          members: group.members.map((member: any) => ({
+            userId: member.userId,
+            role: member.role,
+            status: member.status,
+            joinedAt: member.joinedAt,
+            user:
+              member.userId && typeof member.userId === 'object'
+                ? {
+                    id: member.userId._id,
+                    name: member.userId.name,
+                    username: member.userId.username,
+                    email: member.userId.email,
+                    avatar: member.userId.avatar,
+                    company: member.userId.company,
+                    position: member.userId.position,
+                  }
+                : null,
+          })),
           createdAt: group.createdAt,
+          createdBy: group.createdBy,
+          createdByInfo:
+            group.createdBy &&
+            typeof group.createdBy === 'object' &&
+            (group.createdBy as any)._id
+              ? {
+                  id: (group.createdBy as any)._id,
+                  name: (group.createdBy as any).name,
+                  username: (group.createdBy as any).username,
+                  email: (group.createdBy as any).email,
+                  avatar: (group.createdBy as any).avatar,
+                  company: (group.createdBy as any).company,
+                  position: (group.createdBy as any).position,
+                }
+              : {
+                  id: String(group.createdBy),
+                  name: '未知用户',
+                  username: '',
+                  email: '',
+                  avatar: '',
+                  company: '',
+                  position: '',
+                },
         })),
         message: '获取成功',
       };
@@ -104,8 +208,139 @@ export class AppController {
             groupType: group.groupType,
             status: group.status,
             memberCount: group.members.length,
-            members: group.members,
+            members: await Promise.all(
+              group.members.map(async (member: any) => {
+                // 根据 userId 查找用户信息
+                let userInfo = {
+                  id: String(member.userId),
+                  name: '未知用户',
+                  username: '',
+                  email: '',
+                  avatar: '',
+                  company: '',
+                  position: '',
+                };
+
+                // 检查是否是数字ID或时间戳ID
+                const userIdNum = Number(member.userId);
+                if (!isNaN(userIdNum) && userIdNum > 0) {
+                  // 如果是时间戳格式的ID（13位数字），使用默认用户信息
+                  if (member.userId.length === 13) {
+                    userInfo = {
+                      id: String(member.userId),
+                      name: '用户' + member.userId.slice(-4),
+                      username: 'user_' + member.userId.slice(-4),
+                      email: '',
+                      avatar: '',
+                      company: '',
+                      position: '',
+                    };
+                  } else {
+                    // 如果是小数字ID，从模拟数据中查找
+                    const mockUsers = [
+                      {
+                        id: 1,
+                        username: 'zhangsan',
+                        name: '张三',
+                        email: 'zhangsan@example.com',
+                        avatar: '',
+                        company: '腾讯科技',
+                        position: '高级前端工程师',
+                      },
+                      {
+                        id: 2,
+                        username: 'lisi',
+                        name: '李四',
+                        email: 'lisi@example.com',
+                        avatar: '',
+                        company: '招商银行',
+                        position: '投资经理',
+                      },
+                      {
+                        id: 3,
+                        username: 'wangwu',
+                        name: '王五',
+                        email: 'wangwu@example.com',
+                        avatar: '',
+                        company: '北京大学',
+                        position: '高级讲师',
+                      },
+                      {
+                        id: 4,
+                        username: 'zhaoliu',
+                        name: '赵六',
+                        email: 'zhaoliu@example.com',
+                        avatar: '',
+                        company: '阿里巴巴',
+                        position: '产品经理',
+                      },
+                      {
+                        id: 5,
+                        username: 'chenqi',
+                        name: '陈七',
+                        email: 'chenqi@example.com',
+                        avatar: '',
+                        company: '字节跳动',
+                        position: 'UI设计师',
+                      },
+                      {
+                        id: 6,
+                        username: 'sunba',
+                        name: '孙八',
+                        email: 'sunba@example.com',
+                        avatar: '',
+                        company: '美团',
+                        position: '运营专员',
+                      },
+                    ];
+                    const user = mockUsers.find((u) => u.id === userIdNum);
+                    if (user) {
+                      userInfo = {
+                        id: String(user.id),
+                        name: user.name,
+                        username: user.username,
+                        email: user.email,
+                        avatar: user.avatar,
+                        company: user.company,
+                        position: user.position,
+                      };
+                    }
+                  }
+                }
+
+                return {
+                  userId: member.userId,
+                  role: member.role,
+                  status: member.status,
+                  joinedAt: member.joinedAt,
+                  userInfo,
+                };
+              }),
+            ),
             createdAt: group.createdAt,
+            createdBy: group.createdBy,
+            createdByInfo:
+              group.createdBy &&
+              typeof group.createdBy === 'object' &&
+              (group.createdBy as any)._id
+                ? {
+                    id: (group.createdBy as any)._id,
+                    name: (group.createdBy as any).name,
+                    username: (group.createdBy as any).username,
+                    email: (group.createdBy as any).email,
+                    avatar: (group.createdBy as any).avatar,
+                    company: (group.createdBy as any).company,
+                    position: (group.createdBy as any).position,
+                  }
+                : {
+                    id: String(group.createdBy),
+                    name: '未知用户',
+                    username: '',
+                    email: '',
+                    avatar: '',
+                    company: '',
+                    position: '',
+                  },
           },
           message: '获取成功',
         };
@@ -126,31 +361,116 @@ export class AppController {
   }
 
   @Post('api/groups/:id/join')
+  @HttpCode(200)
   async joinGroupForMini(
     @Param('id') id: string,
     @Body() body: { userId: string },
   ) {
     try {
-      const group = await this.groupsService.findById(id);
-      if (group) {
-        await this.groupsService.joinGroup(id, body.userId);
+      // 验证参数
+      if (!body.userId) {
         return {
-          code: 200,
-          data: { success: true },
-          message: '加入成功',
+          code: 400,
+          data: { success: false },
+          message: '用户ID不能为空',
         };
-      } else {
+      }
+
+      // 验证圈子是否存在
+      const group = await this.groupsService.findById(id);
+      if (!group) {
         return {
           code: 404,
           data: { success: false },
           message: '群组不存在',
         };
       }
+
+      // 检查用户是否已经是成员
+      const existingMember = group.members.find(
+        (member) => member.userId.toString() === body.userId,
+      );
+      if (existingMember) {
+        return {
+          code: 400,
+          data: { success: false },
+          message: '您已经是该群组的成员',
+        };
+      }
+
+      // 加入群组
+      await this.groupsService.joinGroup(id, body.userId);
+      return {
+        code: 200,
+        data: { success: true },
+        message: '加入成功',
+      };
     } catch (error) {
+      console.error('加入群组失败:', error);
       return {
         code: 500,
         data: { success: false },
         message: '加入失败',
+      };
+    }
+  }
+
+  @Get('api/groups/:id/events')
+  async getGroupEventsForMini(@Param('id') id: string) {
+    try {
+      const events = await this.eventsService.findAll(id, 'approved');
+      return {
+        code: 200,
+        data: events.map((event: any) => ({
+          id: event._id,
+          title: event.title,
+          description: event.description,
+          location: event.location,
+          startTime: event.startTime,
+          endTime: event.endTime,
+          maxParticipants: event.maxParticipants,
+          participants: event.participants.length,
+          status: event.status,
+          createdAt: event.createdAt,
+        })),
+        message: '获取活动列表成功',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        data: [],
+        message: '获取活动列表失败',
+      };
+    }
+  }
+
+  @Get('api/groups/:id/dynamics')
+  async getGroupDynamicsForMini(@Param('id') id: string) {
+    try {
+      const dynamics = await this.dynamicsService.findAll(
+        id,
+        undefined,
+        'published',
+      );
+      return {
+        code: 200,
+        data: dynamics.map((dynamic: any) => ({
+          id: dynamic._id,
+          content: dynamic.content,
+          authorName: dynamic.authorId?.name || '未知用户',
+          authorAvatar: dynamic.authorId?.avatar || '',
+          images: dynamic.images || [],
+          likes: dynamic.likes,
+          comments: dynamic.comments,
+          createdAt: dynamic.createdAt,
+        })),
+        message: '获取动态列表成功',
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        data: [],
+        message: '获取动态列表失败',
       };
     }
   }
@@ -164,97 +484,55 @@ export class AppController {
           id: 1,
           username: 'zhangsan',
           name: '张三',
-          industry: '互联网',
-          profession: '软件工程',
-          interests: ['编程', '篮球', '音乐'],
-          position: '高级前端工程师',
-          phone: '13800138001',
+          avatar: '',
           company: '腾讯科技',
-          experience: '5年前端开发经验，精通React、Vue等框架',
-          tags: ['技术专家', '团队负责人'],
+          position: '高级前端工程师',
           status: 'active',
-          createTime: '2024-01-01',
-          lastLoginTime: '2024-01-22 10:30:00',
         },
         {
           id: 2,
           username: 'lisi',
           name: '李四',
-          industry: '金融',
-          profession: '金融学',
-          interests: ['投资', '阅读', '旅行'],
-          position: '投资经理',
-          phone: '13800138002',
+          avatar: '',
           company: '招商银行',
-          experience: '3年投资管理经验，专注股票和债券投资',
-          tags: ['CFA持证人', '投资专家'],
-          status: 'inactive',
-          createTime: '2024-01-02',
-          lastLoginTime: '2024-01-20 15:45:00',
+          position: '投资经理',
+          status: 'active',
         },
         {
           id: 3,
           username: 'wangwu',
           name: '王五',
-          industry: '教育',
-          profession: '教育学',
-          interests: ['教学', '心理学', '摄影'],
-          position: '高级讲师',
-          phone: '13800138003',
+          avatar: '',
           company: '北京大学',
-          experience: '8年教学经验，发表多篇教育研究论文',
-          tags: ['教授', '教育专家'],
+          position: '高级讲师',
           status: 'active',
-          createTime: '2024-01-03',
-          lastLoginTime: '2024-01-22 09:15:00',
         },
         {
           id: 4,
           username: 'zhaoliu',
           name: '赵六',
-          industry: '医疗',
-          profession: '临床医学',
-          interests: ['医学研究', '健身', '烹饪'],
-          position: '主治医师',
-          phone: '13800138004',
-          company: '北京协和医院',
-          experience: '6年临床经验，擅长心血管疾病治疗',
-          tags: ['医学博士', '专家医师'],
+          avatar: '',
+          company: '阿里巴巴',
+          position: '产品经理',
           status: 'active',
-          createTime: '2024-01-04',
-          lastLoginTime: '2024-01-21 14:20:00',
         },
         {
           id: 5,
           username: 'chenqi',
           name: '陈七',
-          industry: '设计',
-          profession: '视觉传达',
-          interests: ['UI设计', '摄影', '旅行'],
-          position: '高级UI设计师',
-          phone: '13800138005',
+          avatar: '',
           company: '字节跳动',
-          experience: '4年UI设计经验，专注移动端产品设计',
-          tags: ['设计专家', '创意总监'],
+          position: 'UI设计师',
           status: 'active',
-          createTime: '2024-01-05',
-          lastLoginTime: '2024-01-22 11:00:00',
         },
         {
           id: 6,
           username: 'sunba',
           name: '孙八',
-          industry: '市场营销',
-          profession: '市场营销',
-          interests: ['品牌策划', '数据分析', '健身'],
-          position: '市场总监',
-          phone: '13800138006',
-          company: '阿里巴巴',
-          experience: '6年市场营销经验，擅长品牌推广和用户增长',
-          tags: ['营销专家', '增长黑客'],
-          status: 'inactive',
-          createTime: '2024-01-06',
-          lastLoginTime: '2024-01-19 16:30:00',
+          avatar: '',
+          company: '美团',
+          position: '运营专员',
+          status: 'active',
         },
       ],
       message: '获取用户列表成功',
@@ -262,6 +540,7 @@ export class AppController {
   }
 
   @Post('api/user/login')
+  @HttpCode(200)
   loginUser(@Body() loginData: { username: string }) {
     const { username } = loginData;
 

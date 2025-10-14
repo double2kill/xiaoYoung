@@ -1,0 +1,92 @@
+.user-avatar {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.user-avatar.small {
+  gap: 8rpx;
+}
+
+.user-avatar.large {
+  gap: 16rpx;
+}
+
+.user-avatar image {
+  border-radius: 50%;
+  border: 1rpx solid #e9ecef;
+  flex-shrink: 0;
+}
+
+.user-avatar.small image {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.user-avatar.medium image {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.user-avatar.large image {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+  min-width: 0;
+  flex: 1;
+}
+
+.user-name {
+  font-size: 24rpx;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-avatar.small .user-name {
+  font-size: 22rpx;
+}
+
+.user-avatar.large .user-name {
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.user-company {
+  font-size: 20rpx;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-avatar.small .user-company {
+  font-size: 18rpx;
+}
+
+.user-avatar.large .user-company {
+  font-size: 22rpx;
+}
+
+.user-position {
+  font-size: 18rpx;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-avatar.small .user-position {
+  font-size: 16rpx;
+}
+
+.user-avatar.large .user-position {
+  font-size: 20rpx;
+}

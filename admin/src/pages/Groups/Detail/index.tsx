@@ -22,7 +22,12 @@ import {
   type GroupMemberItem,
   type UserItem,
 } from '@/services/groups';
-import { CrownOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  CrownOutlined,
+  PlusOutlined,
+  ReloadOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import {
   PageContainer,
   ProCard,
@@ -44,15 +49,15 @@ import {
   Tag,
 } from 'antd';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const GroupDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { isAdminMode, setIsAdminMode } = useAdminMode(true);
+  const memberActionRef = useRef<ActionType>();
   const [groupInfo, setGroupInfo] = useState<GroupItem | null>(null);
-  const [members, setMembers] = useState<GroupMemberItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [memberLoading, setMemberLoading] = useState(false);
+  const [memberCount, setMemberCount] = useState(0);
   const [addMemberModalVisible, setAddMemberModalVisible] = useState(false);
   const [users, setUsers] = useState<UserItem[]>([]);
   const [userLoading, setUserLoading] = useState(false);
@@ -64,11 +69,22 @@ const GroupDetail: React.FC = () => {
   useEffect(() => {
     if (id) {
       fetchGroupDetail();
-      fetchMembers();
       fetchEvents();
       fetchDynamics();
+      fetchMemberCount();
     }
   }, [id]);
+
+  const fetchMemberCount = async () => {
+    try {
+      const result = await getGroupMembers(id!);
+      if (result.code === 200) {
+        setMemberCount(result.data?.length || 0);
+      }
+    } catch (error) {
+      console.error('获取成员数量失败:', error);
+    }
+  };
 
   const fetchGroupDetail = async () => {
     setLoading(true);
@@ -86,28 +102,13 @@ const GroupDetail: React.FC = () => {
     }
   };
 
-  const fetchMembers = async () => {
-    setMemberLoading(true);
-    try {
-      const result = await getGroupMembers(id!);
-      if (result.code === 200) {
-        setMembers(result.data);
-      } else {
-        message.error('获取成员列表失败');
-      }
-    } catch (error) {
-      message.error('网络错误');
-    } finally {
-      setMemberLoading(false);
-    }
-  };
-
   const handleRemoveMember = async (userId: string) => {
     try {
       const result = await removeGroupMember(id!, userId);
       if (result.code === 200) {
         message.success('移除成员成功');
-        fetchMembers();
+        memberActionRef.current?.reload();
+        fetchMemberCount();
       } else {
         message.error('移除成员失败');
       }
@@ -124,7 +125,7 @@ const GroupDetail: React.FC = () => {
         message.success(
           newRole === 'admin' ? '设置管理员成功' : '取消管理员成功',
         );
-        fetchMembers();
+        memberActionRef.current?.reload();
       } else {
         message.error(result.message || '角色更新失败');
       }
@@ -140,7 +141,7 @@ const GroupDetail: React.FC = () => {
       });
       if (result.code === 200) {
         message.success('审批成功');
-        fetchMembers();
+        memberActionRef.current?.reload();
       } else {
         message.error('审批失败');
       }
@@ -174,7 +175,8 @@ const GroupDetail: React.FC = () => {
       if (result.code === 200) {
         message.success('添加成员成功');
         setAddMemberModalVisible(false);
-        fetchMembers();
+        memberActionRef.current?.reload();
+        fetchMemberCount();
       } else {
         message.error(result.message || '添加成员失败');
       }
@@ -366,6 +368,21 @@ const GroupDetail: React.FC = () => {
                   : 0,
             },
             {
+              title: '创建者',
+              dataIndex: 'createdBy',
+              render: (createdBy: any) => {
+                if (!createdBy) return '-';
+                return (
+                  <Space>
+                    <span>{createdBy.name || createdBy.username}</span>
+                    {createdBy.company && (
+                      <Tag color="blue">{createdBy.company}</Tag>
+                    )}
+                  </Space>
+                );
+              },
+            },
+            {
               title: '圈子描述',
               dataIndex: 'description',
               span: 2,
@@ -523,17 +540,35 @@ const GroupDetail: React.FC = () => {
             },
             {
               key: 'members',
-              label: `成员列表 (${members.length})`,
+              label: `成员列表 (${memberCount})`,
               children: (
                 <ProTable<GroupMemberItem>
-                  dataSource={members}
-                  loading={memberLoading}
+                  actionRef={memberActionRef}
+                  request={async () => {
+                    const result = await getGroupMembers(id!);
+                    const data = result.data || [];
+                    setMemberCount(data.length);
+                    return {
+                      data,
+                      success: result.code === 200,
+                      total: data.length,
+                    };
+                  }}
                   rowKey="userId"
                   search={false}
                   pagination={{
                     pageSize: 10,
                   }}
                   toolBarRender={() => [
+                    <Button
+                      key="refresh"
+                      icon={<ReloadOutlined />}
+                      onClick={() => {
+                        memberActionRef.current?.reload();
+                      }}
+                    >
+                      刷新
+                    </Button>,
                     <Button
                       key="add"
                       type="primary"

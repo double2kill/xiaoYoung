@@ -9,6 +9,8 @@ import {
 } from '@nestjs/common';
 import { GroupsService } from '../services/groups.service';
 import { GroupMembersService } from '../services/group-members.service';
+import { CreateGroupDto } from '../dto/create-group.dto';
+import { UpdateGroupDto } from '../dto/update-group.dto';
 
 @Controller('admin/groups')
 export class GroupsController {
@@ -62,7 +64,7 @@ export class GroupsController {
   }
 
   @Post()
-  async createGroup(@Body() createData: any) {
+  async createGroup(@Body() createData: CreateGroupDto) {
     try {
       const group = await this.groupsService.create(createData);
       return {
@@ -80,7 +82,10 @@ export class GroupsController {
   }
 
   @Put(':id')
-  async updateGroup(@Param('id') id: string, @Body() updateData: any) {
+  async updateGroup(
+    @Param('id') id: string,
+    @Body() updateData: UpdateGroupDto,
+  ) {
     try {
       const group = await this.groupsService.update(id, updateData);
       if (group) {

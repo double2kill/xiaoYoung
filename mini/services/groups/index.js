@@ -21,3 +21,17 @@ export const joinGroup = (id, data) => {
     data,
   });
 };
+
+export const getGroupEvents = (id) => {
+  return request({
+    url: `/api/groups/${id}/events`,
+    method: 'GET',
+  });
+};
+
+export const getGroupDynamics = (id) => {
+  return request({
+    url: `/api/groups/${id}/dynamics`,
+    method: 'GET',
+  });
+};

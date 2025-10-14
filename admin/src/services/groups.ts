@@ -5,7 +5,15 @@ export interface GroupItem {
   name: string;
   description: string;
   groupType: string;
-  createdBy: string;
+  createdBy: {
+    _id: string;
+    name: string;
+    username: string;
+    email: string;
+    avatar?: string;
+    company?: string;
+    position?: string;
+  };
   status: 'pending' | 'approved' | 'rejected';
   members: Array<{
     userId: string;

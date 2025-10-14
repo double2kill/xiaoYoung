@@ -43,10 +43,17 @@ Page({
       selectedUser: user,
       showUserList: false
     });
+    
+    // 显示选择确认
+    wx.showToast({
+      title: `已选择 ${user.name}`,
+      icon: 'success',
+      duration: 1500
+    });
   },
 
   async onLogin() {
-    const { username } = this.data;
+    const { username, selectedUser } = this.data;
     
     if (!username.trim()) {
       wx.showToast({
@@ -62,13 +69,27 @@ Page({
       const result = await loginUser(username.trim());
       
       if (result.code === 200 || result.success) {
-        setCurrentUser({
+        // 使用选中的用户信息或API返回的信息
+        const userInfo = selectedUser || {
+          id: result.data?.id || Date.now().toString(),
           username: username.trim(),
-          id: result.data?.id || Date.now().toString()
+          name: username.trim(),
+          avatar: '',
+          company: '',
+          position: ''
+        };
+        
+        setCurrentUser({
+          id: userInfo.id,
+          username: userInfo.username,
+          name: userInfo.name,
+          avatar: userInfo.avatar,
+          company: userInfo.company,
+          position: userInfo.position
         });
         
         wx.showToast({
-          title: '登录成功',
+          title: `欢迎回来，${userInfo.name}`,
           icon: 'success'
         });
 
@@ -90,26 +111,39 @@ Page({
       }
     } catch (error) {
       console.error('登录错误:', error);
-      setCurrentUser({
-        username: username.trim(),
-        id: Date.now().toString()
-      });
       
-      wx.showToast({
-        title: '登录成功',
-        icon: 'success'
-      });
+      // 如果API失败，使用选中的用户信息
+      if (selectedUser) {
+        setCurrentUser({
+          id: selectedUser.id,
+          username: selectedUser.username,
+          name: selectedUser.name,
+          avatar: selectedUser.avatar,
+          company: selectedUser.company,
+          position: selectedUser.position
+        });
+        
+        wx.showToast({
+          title: `欢迎回来，${selectedUser.name}`,
+          icon: 'success'
+        });
 
-      setTimeout(() => {
-        const pages = getCurrentPages();
-        if (pages.length > 1) {
-          wx.navigateBack();
-        } else {
-          wx.switchTab({
-            url: '/pages/usercenter/index'
-          });
-        }
-      }, 1500);
+        setTimeout(() => {
+          const pages = getCurrentPages();
+          if (pages.length > 1) {
+            wx.navigateBack();
+          } else {
+            wx.switchTab({
+              url: '/pages/usercenter/index'
+            });
+          }
+        }, 1500);
+      } else {
+        wx.showToast({
+          title: '登录失败',
+          icon: 'none'
+        });
+      }
     } finally {
       this.setData({ loading: false });
     }

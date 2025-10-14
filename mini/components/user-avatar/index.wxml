@@ -1,0 +1,6 @@
+<view class="user-avatar {{size}}">
+  <image src="{{avatar || '/images/default-avatar.svg'}}" mode="aspectFill" />
+  <view wx:if="{{showName}}" class="user-name">{{name || username || '未知用户'}}</view>
+  <view wx:if="{{showCompany && company}}" class="user-company">{{company}}</view>
+  <view wx:if="{{showPosition && position}}" class="user-position">{{position}}</view>
+</view>

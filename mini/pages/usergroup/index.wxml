@@ -23,9 +23,20 @@
           <text class="stat-label">状态</text>
           <text class="stat-value status-{{item.status}}">{{item.status === 'approved' ? '已通过' : item.status === 'pending' ? '待审核' : '已拒绝'}}</text>
         </view>
+        <view class="stat-item" wx:if="{{item.isJoined}}">
+          <text class="stat-label">我的状态</text>
+          <text class="stat-value joined">已加入</text>
+        </view>
       </view>
       
       <view class="group-footer">
+        <user-avatar
+          avatar="{{item.createdByInfo.avatar}}"
+          name="{{item.createdByInfo.name}}"
+          username="{{item.createdByInfo.username}}"
+          size="small"
+          show-name="{{true}}"
+        />
         <view class="group-meta">
           <text class="meta-text">创建时间: {{item.createdAt}}</text>
         </view>
