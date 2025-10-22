@@ -27,7 +27,8 @@
     "pm2:delete": "pm2 delete xiaoYoung-api",
     "pm2:logs": "pm2 logs xiaoYoung-api",
     "pm2:monit": "pm2 monit",
-    "pm2:status": "pm2 status"
+    "pm2:status": "pm2 status",
+    "publish": "pnpm build && rsync -avz --delete dist/ liuchen@www.greatwebtech.cn:/home/liuchen/pm2/xiaoYoung/api/dist/"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
