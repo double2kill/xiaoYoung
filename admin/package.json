@@ -2,11 +2,12 @@
   "private": true,
   "author": "double2kill <379563000@qq.com>",
   "scripts": {
-    "dev": "max dev",
     "build": "max build",
+    "dev": "max dev",
     "format": "prettier --cache --write .",
-    "prepare": "husky",
     "postinstall": "max setup",
+    "prepare": "husky",
+    "publish": "pnpm build && rsync -avz --delete cms/ liuchen@www.greatwebtech.cn:/home/liuchen/pm2/xiaoYoung/admin/cms/",
     "setup": "max setup",
     "start": "npm run dev"
   },
