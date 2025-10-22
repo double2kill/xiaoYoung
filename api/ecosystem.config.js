@@ -2,7 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'xiaoYoung-api',
-      script: 'dist/main.js',
+      script: 'pnpm',
+      args: 'start',
       instances: 1,
       exec_mode: 'fork',
       env: {
