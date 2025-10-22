@@ -1,0 +1,11 @@
+- script: ./dist/main.js
+  name: xiaoYoung-api
+  cwd: ./
+  watch_options:
+    followSymlinks: false
+  error_file: ./log/aili-error.log
+  out_file: ./log/aili-out.log
+  pid_file: ./log/aili-pid.log
+  log_date_format: YYYY-MM-DD HH:mm:ss
+  env:
+    NODE_ENV: production

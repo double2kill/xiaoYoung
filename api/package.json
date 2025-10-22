@@ -18,16 +18,6 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "pm2:start": "pm2 start ecosystem.config.js",
-    "pm2:start:prod": "pm2 start ecosystem.config.js --env production",
-    "pm2:start:staging": "pm2 start ecosystem.config.js --env staging",
-    "pm2:stop": "pm2 stop xiaoYoung-api",
-    "pm2:restart": "pm2 restart xiaoYoung-api",
-    "pm2:reload": "pm2 reload xiaoYoung-api",
-    "pm2:delete": "pm2 delete xiaoYoung-api",
-    "pm2:logs": "pm2 logs xiaoYoung-api",
-    "pm2:monit": "pm2 monit",
-    "pm2:status": "pm2 status",
     "publish": "pnpm build && rsync -avz --delete dist/ liuchen@www.greatwebtech.cn:/home/liuchen/pm2/xiaoYoung/api/dist/"
   },
   "dependencies": {
