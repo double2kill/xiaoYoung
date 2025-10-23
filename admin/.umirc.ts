@@ -1,9 +1,12 @@
 import { defineConfig } from '@umijs/max';
 import proxy from './config/proxy';
 
+console.log('NODE_ENV', process.env.NODE_ENV);
+
 export default defineConfig({
   outputPath: 'cms',
   base: process.env.NODE_ENV === 'production' ? '/cms/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/cms/' : '/',
   antd: {},
   access: {},
   model: {},

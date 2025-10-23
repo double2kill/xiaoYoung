@@ -1,0 +1,81 @@
+<view class="my-activity">
+  <t-tabs value="{{filterType}}" bind:change="onFilterChange" t-class="filter-tabs">
+    <t-tab-panel wx:for="{{filterOptions}}" wx:key="value" value="{{item.value}}" label="{{item.label}}" />
+  </t-tabs>
+
+  <view class="activity-list">
+    <view wx:if="{{loading && activityList.length === 0}}" class="loading-container">
+      <t-loading size="40rpx" />
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <view wx:elif="{{activityList.length === 0 && !loading}}" class="empty-container">
+      <t-empty icon="calendar" description="暂无活动" />
+    </view>
+
+    <view wx:else>
+      <view class="activity-item" wx:for="{{activityList}}" wx:key="id" data-activity="{{item}}" bind:tap="onActivityTap">
+        <view class="activity-content">
+          <view class="activity-header">
+            <text class="activity-title">{{item.title}}</text>
+            <view class="activity-status">
+              <t-tag 
+                wx:if="{{item.status === 'ongoing'}}"
+                theme="success"
+                size="small"
+              >
+                进行中
+              </t-tag>
+              <t-tag 
+                wx:elif="{{item.status === 'upcoming'}}"
+                theme="primary"
+                size="small"
+              >
+                未开始
+              </t-tag>
+              <t-tag 
+                wx:elif="{{item.status === 'ended'}}"
+                theme="default"
+                size="small"
+              >
+                已结束
+              </t-tag>
+            </view>
+          </view>
+          
+          <text class="activity-description">{{item.description}}</text>
+          
+          <view class="activity-info">
+            <view class="info-item">
+              <t-icon name="time" size="32rpx" />
+              <text class="info-text">{{item.time}}</text>
+            </view>
+            <view class="info-item" wx:if="{{item.location}}">
+              <t-icon name="location" size="32rpx" />
+              <text class="info-text">{{item.location}}</text>
+            </view>
+            <view class="info-item" wx:if="{{item.participants}}">
+              <t-icon name="user" size="32rpx" />
+              <text class="info-text">{{item.participants}}人参与</text>
+            </view>
+          </view>
+        </view>
+        
+        <view class="activity-arrow">
+          <t-icon name="chevron-right" size="32rpx" />
+        </view>
+      </view>
+
+      <view wx:if="{{loading && activityList.length > 0}}" class="load-more">
+        <t-loading size="32rpx" />
+        <text class="load-more-text">加载更多...</text>
+      </view>
+
+      <view wx:elif="{{!hasMore && activityList.length > 0}}" class="no-more">
+        <text>没有更多了</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<t-toast id="t-toast" />

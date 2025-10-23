@@ -1,9 +1,9 @@
-const baseURL = 'http://localhost:8809';
+import { BASE_URL } from './constant';
 
 export const request = (options) => {
   return new Promise((resolve, reject) => {
     wx.request({
-      url: baseURL + options.url,
+      url: BASE_URL + options.url,
       method: options.method || 'GET',
       data: options.data || {},
       header: {

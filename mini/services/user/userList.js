@@ -1,9 +1,9 @@
-const API_BASE_URL = 'http://localhost:8809';
+import { BASE_URL } from '../_utils/constant';
 
 export const getUserList = () => {
   return new Promise((resolve, reject) => {
     wx.request({
-      url: `${API_BASE_URL}/api/user-list`,
+      url: `${BASE_URL}/api/user-list`,
       method: 'GET',
       success: (res) => {
         if (res.statusCode === 200) {

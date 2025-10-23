@@ -1,9 +1,9 @@
-const API_BASE_URL = 'http://localhost:8809';
+import { BASE_URL } from '../_utils/constant';
 
 export const getBusinessCard = async (userId) => {
   try {
     const userIdNum = parseInt(userId);
-    const requestUrl = `${API_BASE_URL}/api/business-card/${userIdNum}`;
+    const requestUrl = `${BASE_URL}/api/business-card/${userIdNum}`;
     console.log('getBusinessCard: 开始请求名片数据，用户ID:', userId, '转换后:', userIdNum);
     console.log('getBusinessCard: 请求URL:', requestUrl);
     

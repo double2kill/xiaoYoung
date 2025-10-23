@@ -151,13 +151,7 @@ Page({
         break;
       }
       case 'activity': {
-        Toast({
-          context: this,
-          selector: '#t-toast',
-          message: '我的活动功能开发中',
-          icon: '',
-          duration: 1000,
-        });
+        wx.navigateTo({ url: '/pages/usercenter/my-activity/index' });
         break;
       }
       case 'settings': {

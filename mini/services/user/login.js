@@ -1,9 +1,9 @@
-const API_BASE_URL = 'http://localhost:8809';
+import { BASE_URL } from '../_utils/constant';
 
 export const loginUser = (username) => {
   return new Promise((resolve, reject) => {
     wx.request({
-      url: `${API_BASE_URL}/api/user/login`,
+      url: `${BASE_URL}/api/user/login`,
       method: 'POST',
       data: {
         username: username.trim()
