@@ -122,7 +122,7 @@ Page({
     try {
       wx.showLoading({ title: '加入中...' });
       
-      const result = await joinUserGroup(this.data.groupInfo.id, { userId: currentUser.id });
+      const result = await joinUserGroup(this.data.groupInfo.id, { userId: String(currentUser.id) });
       wx.hideLoading();
       
       if (result && (result.code === 200 || result.code === '200')) {

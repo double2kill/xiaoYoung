@@ -62,7 +62,7 @@ export const saveBusinessCard = async (businessCard, userId) => {
   try {
     const userIdNum = parseInt(userId);
     const response = await wx.request({
-      url: `${API_BASE_URL}/api/business-card`,
+      url: `${BASE_URL}/api/business-card`,
       method: 'POST',
       data: {
         ...businessCard,
@@ -88,7 +88,7 @@ export const updateBusinessCard = async (userId, updates) => {
   try {
     const userIdNum = parseInt(userId);
     const response = await wx.request({
-      url: `${API_BASE_URL}/api/business-card/${userIdNum}`,
+      url: `${BASE_URL}/api/business-card/${userIdNum}`,
       method: 'PUT',
       data: updates
     });
@@ -116,7 +116,7 @@ export const updateBusinessCard = async (userId, updates) => {
 export const searchBusinessCards = async (query) => {
   try {
     const response = await wx.request({
-      url: `${API_BASE_URL}/api/business-card/list/search`,
+      url: `${BASE_URL}/api/business-card/list/search`,
       method: 'GET',
       data: query,
       timeout: 10000
@@ -137,7 +137,7 @@ export const getRecommendBusinessCards = async (userId) => {
   try {
     const userIdNum = parseInt(userId);
     const response = await wx.request({
-      url: `${API_BASE_URL}/api/business-card/list/recommend`,
+      url: `${BASE_URL}/api/business-card/list/recommend`,
       method: 'GET',
       data: { userId: userIdNum },
       timeout: 10000

@@ -1,6 +1,6 @@
-import { getUserGroupList } from '../../model/usergroup';
-import { formatTimeChinese } from '../../utils/util';
-import { getCurrentUser } from '../../services/user/login';
+import { getUserGroupList } from '../../../model/usergroup';
+import { formatTimeChinese } from '../../../utils/util';
+import { getCurrentUser } from '../../../services/user/login';
 
 Page({
   data: {
@@ -8,7 +8,7 @@ Page({
     loading: true
   },
 
-  async loadGroupList() {
+  async loadMyGroups() {
     try {
       this.setData({ loading: true });
       const result = await getUserGroupList();
@@ -29,7 +29,6 @@ Page({
 
         const formattedData = result.data.map(item => {
           const isJoined = !!currentUserId && Array.isArray(item.members) && item.members.some(member => normalizeMemberUserId(member) === currentUserId);
-
           return {
             ...item,
             createdAt: formatTimeChinese(item.createdAt, 'date'),
@@ -43,52 +42,49 @@ Page({
             }
           };
         });
-        
-        this.setData({
-          groupList: formattedData,
-          loading: false
-        });
+
+        const myGroups = formattedData.filter(item => item.isJoined);
+        this.setData({ groupList: myGroups, loading: false });
       } else {
         this.setData({ loading: false });
       }
-    } catch (error) {
+    } catch (e) {
       this.setData({ loading: false });
-      wx.showToast({
-        title: '加载失败',
-        icon: 'none'
-      });
+      wx.showToast({ title: '加载失败', icon: 'none' });
     }
   },
 
   onGroupTap(e) {
     const id = e.currentTarget.dataset.id;
-    
     if (!id) {
-      wx.showToast({
-        title: '圈子ID错误',
-        icon: 'none'
-      });
+      wx.showToast({ title: '圈子ID错误', icon: 'none' });
       return;
     }
-    
-    wx.navigateTo({
-      url: `/pages/usergroup/detail/index?id=${id}`,
-      fail: (err) => {
-        console.error('跳转失败:', err);
-        wx.showToast({
-          title: '页面跳转失败',
-          icon: 'none'
-        });
-      }
-    });
+    wx.navigateTo({ url: `/pages/usergroup/detail/index?id=${id}` });
+  },
+
+  onGoAllGroups() {
+    wx.navigateTo({ url: '/pages/usergroup/index' });
   },
 
   onShow() {
-    this.getTabBar().init();
-    this.loadGroupList();
+    if (this.getTabBar && this.getTabBar()) {
+      this.getTabBar().init();
+    }
+    this.loadMyGroups();
   },
 
   onLoad() {
-    this.loadGroupList();
+    this.loadMyGroups();
+  },
+
+  async onPullDownRefresh() {
+    try {
+      await this.loadMyGroups();
+    } finally {
+      wx.stopPullDownRefresh();
+    }
   },
 });
+
+

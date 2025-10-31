@@ -7,7 +7,7 @@ export default [
   {
     icon: 'sort',
     text: '圈子',
-    url: 'pages/usergroup/index',
+    url: 'pages/usergroup/my/index',
   },
   // {
   //   icon: 'cart',
